@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const display = Cormorant_Garamond({
@@ -12,6 +12,13 @@ const display = Cormorant_Garamond({
 const ui = Inter({
   subsets: ["latin"],
   variable: "--font-ui",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -35,7 +42,7 @@ const themeBoot = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${ui.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${display.variable} ${ui.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
       </head>

@@ -3,11 +3,12 @@ import { redirect } from "next/navigation";
 import { getStudentAuth } from "@/lib/auth/student-session";
 import { listLibraryForUser } from "@/lib/auth/entitlements";
 import { LogoutButton } from "./logout-button";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { PageEyebrow } from "@/components/ui/PageEyebrow";
-import { DisplayHeading } from "@/components/ui/DisplayHeading";
-import { LibraryContentCard } from "@/components/library/LibraryContentCard";
-import { LockedContentCard } from "@/components/library/LockedContentCard";
+import { StudyPackCard } from "@/components/library/StudyPackCard";
+import { LockedPackCard } from "@/components/library/LockedPackCard";
+import { LibraryFilters } from "@/components/library/LibraryFilters";
+import { InfoCard } from "@/components/library/InfoCard";
+import { MemeCard } from "@/components/library/MemeCard";
+import { LIBRARY_MEMES, INFO_MESSAGES } from "@/lib/library-memes";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function LibraryPage() {
 
   const items = await listLibraryForUser(auth.userId);
   const unlocked = items.filter((i) => i.entitled).length;
+  const total = items.length;
 
   const grouped = new Map<string, Map<number, typeof items>>();
   for (const item of items) {
@@ -27,80 +29,146 @@ export default async function LibraryPage() {
   }
 
   return (
-    <main className="vault-page">
-      <div className="lib-shell">
-        <div className="glass-panel glass-nav lib-nav">
-          <Link href="/library" className="brand-mark">
-            REVOLQ<span>NEXUS</span>
-          </Link>
-          <div className="lib-nav-actions">
-            <span className="account-chip">{auth.studentId}</span>
-            <ThemeToggle />
-            <LogoutButton />
+    <div className="sb-page">
+      {/* Top bar */}
+      <header className="sb-topbar">
+        <Link href="/library" className="sb-brand">
+          REVOLQ<span>NEXUS</span>
+        </Link>
+        <div className="sb-topbar-right">
+          <span className="sb-account-pill">{auth.studentId}</span>
+          <LogoutButton />
+        </div>
+      </header>
+
+      {/* Main content */}
+      <main className="sb-inner sb-lib-content">
+        {/* Header */}
+        <div className="sb-lib-header sb-fade-up">
+          <h1 className="sb-lib-heading">
+            Hey, {auth.name.split(" ")[0]} 👋
+          </h1>
+          <p className="sb-lib-subhead">
+            Your study board — browse, tap, and get to work.
+          </p>
+
+          {/* Quick stats */}
+          <div className="sb-stats-row">
+            <div className="sb-stat-card">
+              <span className="sb-stat-num">{unlocked}</span>
+              <span className="sb-stat-label">Packs unlocked</span>
+            </div>
+            <div className="sb-stat-card">
+              <span className="sb-stat-num">{total}</span>
+              <span className="sb-stat-label">Total listed</span>
+            </div>
+            <div className="sb-stat-card">
+              <span className="sb-stat-num">{total - unlocked}</span>
+              <span className="sb-stat-label">Available to unlock</span>
+            </div>
           </div>
         </div>
 
-        <header className="motion-fade-up">
-          <PageEyebrow>Your library</PageEyebrow>
-          <DisplayHeading>Study what matters.</DisplayHeading>
-          <p className="body-copy">
-            Your exam packs, organised by course and year.
-          </p>
-          <div className="lib-stats">
-            <span className="lib-stat">{unlocked} packs unlocked</span>
-            <span className="lib-stat">{items.length} subjects listed</span>
-            <span className="lib-stat">Hi, {auth.name}</span>
-          </div>
-        </header>
+        {/* Filter chips (client island) */}
+        <LibraryFilters />
 
         {items.length === 0 && (
-          <p className="body-copy muted">
+          <p style={{ color: "var(--sb-text-muted)", fontSize: 14 }}>
             No study materials yet. Contact us after payment.
           </p>
         )}
 
+        {/* Course sections */}
         {[...grouped.entries()].map(([course, years]) => (
-          <section key={course} className="lib-course">
-            <h2 className="lib-course-title">{course}</h2>
+          <section key={course} className="sb-course-section">
+            <h2 className="sb-course-heading">{course}</h2>
+
             {[...years.entries()]
               .sort((a, b) => a[0] - b[0])
-              .map(([year, list]) => (
-                <div key={year}>
-                  <p className="lib-year-label">
-                    {year}
-                    {year === 1 ? "st" : year === 2 ? "nd" : year === 3 ? "rd" : "th"}{" "}
-                    Year
-                  </p>
-                  <div className="lib-grid">
-                    {list.map((item, idx) =>
-                      item.entitled ? (
-                        <LibraryContentCard
-                          key={item.id}
-                          title={item.title}
-                          slug={item.slug}
-                          paperCode={item.paperCode}
-                          course={item.course}
-                          studyYear={item.studyYear}
-                          description={item.description}
-                          featured={idx === 0}
+              .map(([year, list]) => {
+                const ordinal =
+                  year === 1
+                    ? "st"
+                    : year === 2
+                    ? "nd"
+                    : year === 3
+                    ? "rd"
+                    : "th";
+                return (
+                  <div key={year}>
+                    <p className="sb-year-label">
+                      {year}
+                      {ordinal} Year
+                    </p>
+                    <div className="sb-grid">
+                      {/* Inject meme/info cards at strategic positions */}
+                      {list.length > 2 && list.map((_, idx) => idx).includes(1) && (
+                        <MemeCard
+                          key="meme-1"
+                          imageUrl={LIBRARY_MEMES[0].imageUrl}
+                          title={LIBRARY_MEMES[0].title}
+                          subtitle={LIBRARY_MEMES[0].subtitle}
                         />
-                      ) : (
-                        <LockedContentCard
-                          key={item.id}
-                          title={item.title}
-                          paperCode={item.paperCode}
-                          course={item.course}
-                          studyYear={item.studyYear}
-                          priceInrPaise={item.priceInrPaise}
+                      )}
+                      {list.length > 3 && list.map((_, idx) => idx).includes(2) && (
+                        <InfoCard
+                          key="info-1"
+                          title={INFO_MESSAGES[0].title}
+                          subtitle={INFO_MESSAGES[0].subtitle}
                         />
-                      )
-                    )}
+                      )}
+                      {list.length > 5 && list.map((_, idx) => idx).includes(4) && (
+                        <InfoCard
+                          key="info-2"
+                          variant="meme"
+                          title={INFO_MESSAGES[1].title}
+                          subtitle={INFO_MESSAGES[1].subtitle}
+                        />
+                      )}
+                      {list.length > 7 && list.map((_, idx) => idx).includes(6) && (
+                        <MemeCard
+                          key="meme-2"
+                          imageUrl={LIBRARY_MEMES[1].imageUrl}
+                          title={LIBRARY_MEMES[1].title}
+                          subtitle={LIBRARY_MEMES[1].subtitle}
+                        />
+                      )}
+                      {list.map((item) =>
+                        item.entitled ? (
+                          <StudyPackCard
+                            key={item.id}
+                            title={item.title}
+                            slug={item.slug}
+                            paperCode={item.paperCode}
+                            course={item.course}
+                            studyYear={item.studyYear}
+                            description={item.description}
+                          />
+                        ) : (
+                          <LockedPackCard
+                            key={item.id}
+                            title={item.title}
+                            paperCode={item.paperCode}
+                            course={item.course}
+                            studyYear={item.studyYear}
+                            priceInrPaise={item.priceInrPaise}
+                          />
+                        )
+                      )}
+                      {list.length > 8 && list.map((_, idx) => idx).includes(8) && (
+                        <InfoCard
+                          key="info-3"
+                          title={INFO_MESSAGES[2].title}
+                          subtitle={INFO_MESSAGES[2].subtitle}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </section>
         ))}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

@@ -8,15 +8,91 @@ import {
   deviceLabelGuess,
   signChallenge,
 } from "@/lib/device/webcrypto-client";
-import { GlassPanel } from "@/components/ui/GlassPanel";
-import { VaultButton } from "@/components/ui/VaultButton";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { PageEyebrow } from "@/components/ui/PageEyebrow";
-import { DisplayHeading } from "@/components/ui/DisplayHeading";
-import { DeviceStatePanel } from "@/components/auth/DeviceStatePanel";
 
 type UiPhase = "form" | "verifying" | "register" | "unauthorized";
 
+/* ── Device state sub-views ── */
+function DeviceVerifying() {
+  return (
+    <div className="sb-login-body" style={{ justifyContent: "center" }}>
+      <div className="sb-device-state">
+        <div className="sb-device-ring" aria-hidden />
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sb-accent-indigo)", margin: "0 0 8px" }}>
+          Device check
+        </p>
+        <h2 className="sb-device-heading">Checking this device.</h2>
+        <p className="sb-device-body">
+          Your study access is linked to one authorised browser.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DeviceRegister({ onSecure, busy }: { onSecure: () => void; busy: boolean }) {
+  return (
+    <div className="sb-login-body" style={{ justifyContent: "center" }}>
+      <div className="sb-device-state">
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--sb-accent-indigo)", margin: "0 0 8px" }}>
+          First login
+        </p>
+        <h2 className="sb-device-heading">Secure this device.</h2>
+        <p className="sb-device-body">
+          Your first authorised browser becomes the device linked to this student
+          account. Other phones cannot access your library.
+        </p>
+        <div className="sb-device-actions">
+          <button
+            type="button"
+            className="sb-btn sb-btn-primary sb-btn-full"
+            onClick={onSecure}
+            disabled={busy}
+          >
+            {busy ? "Securing…" : "Secure this device"}
+          </button>
+        </div>
+        <p className="sb-note">Changing devices later requires an admin reset.</p>
+      </div>
+    </div>
+  );
+}
+
+function DeviceUnauthorized() {
+  return (
+    <div className="sb-login-body" style={{ justifyContent: "center" }}>
+      <div className="sb-device-state error">
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#b91c1c", margin: "0 0 8px" }}>
+          Device
+        </p>
+        <h2 className="sb-device-heading">Not your registered device.</h2>
+        <p className="sb-device-body">
+          This account is already linked to another browser. Contact support if
+          you&apos;ve switched phones or cleared browser data.
+        </p>
+        <div className="sb-device-actions">
+          <a
+            href={process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/"}
+            target="_blank"
+            rel="noreferrer"
+            className="sb-btn sb-btn-primary sb-btn-full"
+            style={{ textDecoration: "none" }}
+          >
+            Contact support
+          </a>
+          <Link
+            href="/login"
+            className="sb-btn sb-btn-secondary sb-btn-full"
+            style={{ textDecoration: "none" }}
+          >
+            Back to login
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main login page ── */
 export default function StudentLoginPage() {
   const router = useRouter();
   const [studentId, setStudentId] = useState("");
@@ -76,14 +152,12 @@ export default function StudentLoginPage() {
         setBusy(false);
         return;
       }
-
       if (data.next === "REGISTER_DEVICE") {
         setRegistrationToken(data.registrationToken);
         setPhase("register");
         setBusy(false);
         return;
       }
-
       if (data.next === "CHALLENGE") {
         let signatureB64: string;
         try {
@@ -96,10 +170,7 @@ export default function StudentLoginPage() {
         const ver = await fetch("/api/auth/verify-device", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            challengeId: data.challengeId,
-            signatureB64,
-          }),
+          body: JSON.stringify({ challengeId: data.challengeId, signatureB64 }),
         });
         const verData = await ver.json();
         if (!verData.ok) {
@@ -110,7 +181,6 @@ export default function StudentLoginPage() {
         router.replace("/library");
         return;
       }
-
       setError("Unexpected login response");
       setPhase("form");
     } catch {
@@ -122,52 +192,50 @@ export default function StudentLoginPage() {
   }
 
   return (
-    <main className="vault-page">
-      <div className="landing-shell">
-        <div className="glass-panel glass-nav lib-nav" style={{ marginBottom: 28 }}>
-          <Link href="/" className="brand-mark">
-            REVOLQ<span>NEXUS</span>
-          </Link>
-          <div className="lib-nav-actions">
-            <ThemeToggle />
-          </div>
-        </div>
+    <div className="sb-page sb-login-wrap">
+      {/* Top bar */}
+      <header className="sb-topbar">
+        <Link href="/" className="sb-brand">
+          REVOLQ<span>NEXUS</span>
+        </Link>
+      </header>
 
-        {phase === "verifying" && <DeviceStatePanel kind="verifying" />}
-        {phase === "register" && (
-          <DeviceStatePanel kind="register" onSecure={secureDevice} busy={busy} />
-        )}
-        {phase === "unauthorized" && <DeviceStatePanel kind="unauthorized" />}
+      {/* Phase views */}
+      {phase === "verifying" && <DeviceVerifying />}
+      {phase === "register" && (
+        <DeviceRegister onSecure={secureDevice} busy={busy} />
+      )}
+      {phase === "unauthorized" && <DeviceUnauthorized />}
 
-        {phase === "form" && (
-          <div className="login-layout motion-fade-up">
-            <section className="login-copy">
-              <PageEyebrow>Private study access</PageEyebrow>
-              <DisplayHeading>
-                Everything you need.{"\n"}Nothing you don&apos;t.
-              </DisplayHeading>
-              <p className="body-copy">
+      {phase === "form" && (
+        <div className="sb-login-body">
+          <div className="sb-login-grid sb-fade-up">
+            {/* Copy side */}
+            <section>
+              <h1 className="sb-login-copy-heading">
+                {"Your study stuff\nis here."}
+              </h1>
+              <p className="sb-login-copy-body">
                 Your purchased exam packs, predictions, revision systems and mock
-                papers — in one private library.
+                papers — in one private library. Log in and get back to it.
               </p>
-              <div className="trust-row">
-                <span className="trust-chip">Device-bound access</span>
-                <span className="trust-chip">Private study library</span>
-                <span className="trust-chip">Progress stays on your device</span>
+              <div className="sb-login-trust">
+                <span className="sb-tag sb-tag-sky">Device-bound access</span>
+                <span className="sb-tag sb-tag-mint">Private library</span>
+                <span className="sb-tag sb-tag-lilac">Progress on your device</span>
               </div>
             </section>
 
-            <GlassPanel variant="form" className="login-panel">
-              <PageEyebrow>Welcome back</PageEyebrow>
-              <DisplayHeading size="sm" as="h2">
-                Enter your vault.
-              </DisplayHeading>
-              <p className="body-copy muted" style={{ marginBottom: 20 }}>
+            {/* Form panel */}
+            <div className="sb-login-form-panel">
+              <p className="sb-login-form-eyebrow">Welcome back</p>
+              <h2 className="sb-login-form-heading">Log in</h2>
+              <p className="sb-login-form-sub">
                 Use the Student ID and password sent on WhatsApp.
               </p>
 
               <form onSubmit={onSubmit}>
-                <div className="vault-field">
+                <div className="sb-field">
                   <label htmlFor="studentId">Student ID</label>
                   <input
                     id="studentId"
@@ -179,9 +247,9 @@ export default function StudentLoginPage() {
                   />
                 </div>
 
-                <div className="vault-field">
+                <div className="sb-field">
                   <label htmlFor="password">Password</label>
-                  <div className="password-wrap">
+                  <div className="sb-pw-wrap">
                     <input
                       id="password"
                       type={showPass ? "text" : "password"}
@@ -193,7 +261,7 @@ export default function StudentLoginPage() {
                     />
                     <button
                       type="button"
-                      className="password-toggle"
+                      className="sb-pw-toggle"
                       onClick={() => setShowPass((v) => !v)}
                       aria-label={showPass ? "Hide password" : "Show password"}
                     >
@@ -202,19 +270,25 @@ export default function StudentLoginPage() {
                   </div>
                 </div>
 
-                <VaultButton type="submit" orb disabled={busy}>
-                  {busy ? "Please wait…" : "Enter study vault"}
-                </VaultButton>
+                <button
+                  type="submit"
+                  className="sb-btn sb-btn-primary sb-btn-full"
+                  disabled={busy}
+                >
+                  {busy ? "Please wait…" : "Log in to my library"}
+                </button>
               </form>
 
-              {error && <p className="vault-error">{error}</p>}
-              <p className="vault-note">
-                First login binds this browser. Other phones cannot open your account.
+              {error && <p className="sb-error">{error}</p>}
+
+              <p className="sb-note">
+                First login binds this browser. Other phones cannot open your
+                account.
               </p>
-            </GlassPanel>
+            </div>
           </div>
-        )}
-      </div>
-    </main>
+        </div>
+      )}
+    </div>
   );
 }

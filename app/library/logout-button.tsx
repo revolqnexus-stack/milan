@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { VaultButton } from "@/components/ui/VaultButton";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -15,8 +14,13 @@ export function LogoutButton() {
   }
 
   return (
-    <VaultButton type="button" variant="ghost" onClick={logout} disabled={busy}>
+    <button
+      type="button"
+      className="sb-btn sb-btn-ghost"
+      onClick={logout}
+      disabled={busy}
+    >
       {busy ? "…" : "Logout"}
-    </VaultButton>
+    </button>
   );
 }

@@ -4,6 +4,7 @@
 @import "./styles/liquid-glass.css";
 @import "./styles/motion.css";
 @import "./styles/shell.css";
+@import "./styles/student-board.css";
 
 .content-card-link {
   text-decoration: none;

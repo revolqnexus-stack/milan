@@ -1,11 +1,13 @@
 import { put, del, get } from "@vercel/blob";
 
-function requireToken() {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) {
-    throw new Error("BLOB_READ_WRITE_TOKEN is not set");
-  }
-  return token;
+/** Token from env, or undefined so the SDK can use Vercel OIDC on deployed builds. */
+function resolveBlobAuth(): { token?: string } {
+  const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
+  if (token) return { token };
+  if (process.env.VERCEL) return {};
+  throw new Error(
+    "BLOB_READ_WRITE_TOKEN is not set. Add it to .env.local locally, or connect a Vercel Blob store and redeploy."
+  );
 }
 
 export async function uploadPrivateHtml(opts: {
@@ -13,11 +15,11 @@ export async function uploadPrivateHtml(opts: {
   bytes: Buffer | ArrayBuffer | Blob;
   contentType?: string;
 }) {
-  const token = requireToken();
+  const auth = resolveBlobAuth();
   const pathname = `study-content/${opts.slug}/index.html`;
   const result = await put(pathname, opts.bytes, {
     access: "private",
-    token,
+    ...auth,
     contentType: opts.contentType || "text/html; charset=utf-8",
     addRandomSuffix: false,
     allowOverwrite: true,
@@ -31,11 +33,11 @@ export async function uploadPrivateThumbnail(opts: {
   contentType: string;
   ext: string;
 }) {
-  const token = requireToken();
+  const auth = resolveBlobAuth();
   const pathname = `study-content/${opts.slug}/thumb.${opts.ext}`;
   const result = await put(pathname, opts.bytes, {
     access: "private",
-    token,
+    ...auth,
     contentType: opts.contentType,
     addRandomSuffix: false,
     allowOverwrite: true,
@@ -44,10 +46,10 @@ export async function uploadPrivateThumbnail(opts: {
 }
 
 export async function fetchPrivateBlob(pathnameOrUrl: string): Promise<string> {
-  const token = requireToken();
+  const auth = resolveBlobAuth();
   const result = await get(pathnameOrUrl, {
     access: "private",
-    token,
+    ...auth,
   });
   if (!result || !result.stream) {
     throw new Error("Blob fetch failed: empty stream");
@@ -57,9 +59,9 @@ export async function fetchPrivateBlob(pathnameOrUrl: string): Promise<string> {
 }
 
 export async function deletePrivateBlob(pathnameOrUrl: string) {
-  const token = requireToken();
+  const auth = resolveBlobAuth();
   try {
-    await del(pathnameOrUrl, { token });
+    await del(pathnameOrUrl, auth);
   } catch {
     // ignore missing
   }

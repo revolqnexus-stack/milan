@@ -63,8 +63,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Preview card stack */}
+          {/* Preview card stack with original animations */}
           <div className="sb-preview-stack" aria-hidden>
+            {/* Animated books card */}
+            <div className="sb-preview-card" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+              <img 
+                src="/media/animations/floating-books.svg" 
+                alt=""
+                width="160"
+                height="160"
+                style={{ opacity: 0.85 }}
+              />
+            </div>
+            
             <div className="sb-preview-card">
               <div style={{ 
                 width: "calc(100% + 32px)", 
@@ -84,33 +95,23 @@ export default function HomePage() {
                 <span className="sb-tag sb-tag-peach">High yield</span>
               </div>
             </div>
-            <div className="sb-preview-card">
-              <div style={{ 
-                width: "calc(100% + 32px)", 
-                height: 60, 
-                margin: "-16px -16px 10px",
-                background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                borderRadius: "18px 18px 0 0"
-              }} />
-              <p className="sb-pc-title">195 rapid drills</p>
-              <p className="sb-pc-meta">Definitions · blanks · T/F traps</p>
+            
+            {/* Animated coffee card */}
+            <div className="sb-preview-card" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)" }}>
+              <img 
+                src="/media/animations/coffee-steam.svg" 
+                alt=""
+                width="100"
+                height="120"
+                style={{ opacity: 0.9 }}
+              />
             </div>
+            
             <div className="sb-preview-card" style={{ background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)", borderColor: "rgba(245, 158, 11, 0.3)" }}>
               <p className="sb-pc-title" style={{ color: "#92400e", marginTop: 8 }}>Exam in 3 days?</p>
               <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
                 <span className="sb-tag sb-tag-blush">Last-minute pack</span>
               </div>
-            </div>
-            <div className="sb-preview-card">
-              <div style={{ 
-                width: "calc(100% + 32px)", 
-                height: 60, 
-                margin: "-16px -16px 10px",
-                background: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-                borderRadius: "18px 18px 0 0"
-              }} />
-              <p className="sb-pc-title">96% coverage</p>
-              <p className="sb-pc-meta">Most repeated · Priority tracker</p>
             </div>
           </div>
         </section>

@@ -8,6 +8,7 @@ import { LockedPackCard } from "@/components/library/LockedPackCard";
 import { LibraryFilters } from "@/components/library/LibraryFilters";
 import { InfoCard } from "@/components/library/InfoCard";
 import { MemeCard } from "@/components/library/MemeCard";
+import { EmptyLibrary } from "@/components/library/EmptyLibrary";
 import { LIBRARY_MEMES, INFO_MESSAGES } from "@/lib/library-memes";
 
 export const dynamic = "force-dynamic";
@@ -72,14 +73,12 @@ export default async function LibraryPage() {
         {/* Filter chips (client island) */}
         <LibraryFilters />
 
-        {items.length === 0 && (
-          <p style={{ color: "var(--sb-text-muted)", fontSize: 14 }}>
-            No study materials yet. Contact us after payment.
-          </p>
-        )}
-
-        {/* Course sections */}
-        {[...grouped.entries()].map(([course, years]) => (
+        {items.length === 0 ? (
+          <EmptyLibrary />
+        ) : (
+          <>
+            {/* Course sections */}
+            {[...grouped.entries()].map(([course, years]) => (
           <section key={course} className="sb-course-section">
             <h2 className="sb-course-heading">{course}</h2>
 
@@ -101,8 +100,8 @@ export default async function LibraryPage() {
                       {ordinal} Year
                     </p>
                     <div className="sb-grid">
-                      {/* Inject meme/info cards at strategic positions */}
-                      {list.length > 2 && list.map((_, idx) => idx).includes(1) && (
+                      {/* Inject meme/info cards at strategic positions (only if available) */}
+                      {list.length > 2 && list.map((_, idx) => idx).includes(1) && LIBRARY_MEMES[0] && (
                         <MemeCard
                           key="meme-1"
                           imageUrl={LIBRARY_MEMES[0].imageUrl}
@@ -120,12 +119,12 @@ export default async function LibraryPage() {
                       {list.length > 5 && list.map((_, idx) => idx).includes(4) && (
                         <InfoCard
                           key="info-2"
-                          variant="meme"
                           title={INFO_MESSAGES[1].title}
                           subtitle={INFO_MESSAGES[1].subtitle}
+                          bgColor="linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)"
                         />
                       )}
-                      {list.length > 7 && list.map((_, idx) => idx).includes(6) && (
+                      {list.length > 7 && list.map((_, idx) => idx).includes(6) && LIBRARY_MEMES[1] && (
                         <MemeCard
                           key="meme-2"
                           imageUrl={LIBRARY_MEMES[1].imageUrl}
@@ -168,6 +167,8 @@ export default async function LibraryPage() {
               })}
           </section>
         ))}
+          </>
+        )}
       </main>
     </div>
   );

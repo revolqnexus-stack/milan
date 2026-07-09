@@ -1,40 +1,31 @@
-// Add your own study meme GIFs and aesthetic images here!
-// Replace these Unsplash placeholder URLs with your own hosted images or GIF URLs
+// Study culture visual content configuration
+// Only use legally cleared, self-hosted media here
 
-export const LIBRARY_MEMES = [
-  {
-    id: "study-mode",
-    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&auto=format&fit=crop",
-    title: "Study mode activated",
-    subtitle: "Coffee + notes + determination",
-  },
-  {
-    id: "exam-survival",
-    imageUrl: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&auto=format&fit=crop",
-    title: "Exam survival kit",
-    subtitle: "Notes, highlighters, and chaos",
-  },
-  {
-    id: "brain-full",
-    imageUrl: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&auto=format&fit=crop",
-    title: "Brain storage: 99% full",
-    subtitle: "Delete old memories to continue",
-  },
-  {
-    id: "study-aesthetic",
-    imageUrl: "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=400&auto=format&fit=crop",
-    title: "Study aesthetic",
-    subtitle: "Making notes look pretty = procrastination",
-  },
-  {
-    id: "coffee-powered",
-    imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&auto=format&fit=crop",
-    title: "Fueled by caffeine",
-    subtitle: "Powered by panic",
-  },
+// If you want to add meme images/GIFs:
+// 1. Source from Pixabay (Pixabay Content License) or create original
+// 2. Download and place in public/media/study-culture/
+// 3. Add entry to content/media-licenses.json
+// 4. Reference here as /media/study-culture/filename.ext
+
+export type LibraryMeme = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  subtitle: string;
+};
+
+export const LIBRARY_MEMES: LibraryMeme[] = [
+  // Placeholder - add your own legally cleared study aesthetic images/GIFs here
+  // Example:
+  // {
+  //   id: "study-mode",
+  //   imageUrl: "/media/study-culture/study-desk.webp",
+  //   title: "Study mode activated",
+  //   subtitle: "Coffee + notes + determination",
+  // },
 ];
 
-// Fun info card messages (no emojis)
+// Text-only info cards (no external media)
 export const INFO_MESSAGES = [
   {
     title: "Most repeated topics",
@@ -43,7 +34,6 @@ export const INFO_MESSAGES = [
   {
     title: "Brain not responding?",
     subtitle: "Take a break, hydrate, come back",
-    variant: "meme" as const,
   },
   {
     title: "Exam in 3 days?",
@@ -60,6 +50,5 @@ export const INFO_MESSAGES = [
   {
     title: "Track your progress",
     subtitle: "Small wins add up",
-    variant: "meme" as const,
   },
 ];

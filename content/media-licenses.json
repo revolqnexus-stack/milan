@@ -1,0 +1,41 @@
+[
+  {
+    "localPath": "/media/animations/floating-books.svg",
+    "title": "Floating Books Animation (Original)",
+    "creator": "REVOLQNEXUS",
+    "source": "Original work",
+    "provider": "In-house",
+    "license": "Proprietary",
+    "licenseUrl": "N/A",
+    "attributionRequired": false,
+    "commercialUseChecked": true,
+    "checkedAt": "2026-07-10",
+    "notes": "Original SVG animation created for this project"
+  },
+  {
+    "localPath": "/media/animations/exam-paper-shuffle.svg",
+    "title": "Exam Paper Shuffle Animation (Original)",
+    "creator": "REVOLQNEXUS",
+    "source": "Original work",
+    "provider": "In-house",
+    "license": "Proprietary",
+    "licenseUrl": "N/A",
+    "attributionRequired": false,
+    "commercialUseChecked": true,
+    "checkedAt": "2026-07-10",
+    "notes": "Original SVG animation created for this project"
+  },
+  {
+    "localPath": "/media/animations/coffee-steam.svg",
+    "title": "Coffee Steam Animation (Original)",
+    "creator": "REVOLQNEXUS",
+    "source": "Original work",
+    "provider": "In-house",
+    "license": "Proprietary",
+    "licenseUrl": "N/A",
+    "attributionRequired": false,
+    "commercialUseChecked": true,
+    "checkedAt": "2026-07-10",
+    "notes": "Original SVG animation created for this project"
+  }
+]

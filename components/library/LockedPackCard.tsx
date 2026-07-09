@@ -27,33 +27,31 @@ export function LockedPackCard({
 
   return (
     <article className="sb-card sb-card-locked">
-      {/* Locked preview with subtle pattern */}
-      <div className="sb-card-preview" style={{ 
-        background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
-        opacity: 0.8 
-      }}>
-        <div style={{ 
-          fontSize: "0.7rem", 
-          fontWeight: 800, 
-          color: "rgba(146, 64, 14, 0.4)", 
-          textTransform: "uppercase", 
-          letterSpacing: "0.15em" 
-        }}>
-          Locked
+      {/* Tag floats on top */}
+      <div className="sb-card-tag-float">
+        <span className="sb-tag sb-tag-locked">Locked</span>
+      </div>
+
+      {/* Gradient visual with light overlay */}
+      <div 
+        className="sb-card-visual"
+        style={{
+          background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
+        }}
+      >
+        <div className="sb-card-overlay-light" />
+        <div className="sb-card-content-overlay">
+          <h3 className="sb-card-title">{title}</h3>
+          <p className="sb-card-meta">
+            {paperCode ? `Q.P. ${paperCode} · ` : ""}
+            {course} · {studyYear}
+            {ORDINAL(studyYear)} Year
+          </p>
         </div>
       </div>
 
-      <span className="sb-tag sb-tag-locked">Locked</span>
-      <h3 className="sb-card-title">{title}</h3>
-      <p className="sb-card-meta">
-        {paperCode ? `Q.P. ${paperCode} · ` : ""}
-        {course} · {studyYear}
-        {ORDINAL(studyYear)} Year
-      </p>
-      <p className="sb-card-desc">
-        Get access to past papers, answers and revision materials for this subject.
-      </p>
-      <div className="sb-card-footer">
+      {/* Compact footer */}
+      <div className="sb-card-text-compact" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span className="sb-card-price">{formatPrice(priceInrPaise)}</span>
         <a
           className="sb-card-enquire"

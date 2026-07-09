@@ -3,7 +3,7 @@ import Link from "next/link";
 const ORDINAL = (n: number) =>
   n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
 
-// Gradient palette for visual variety
+// Gradient palette for cards (no external images)
 const GRADIENTS = [
   "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
@@ -40,34 +40,35 @@ export function StudyPackCard({
   return (
     <Link href={`/study/${slug}`} className="sb-card-link">
       <article className="sb-card">
-        {/* Visual preview with gradient */}
-        <div className="sb-card-preview" style={{ background: gradient }}>
-          <div style={{ 
-            fontSize: "0.7rem", 
-            fontWeight: 800, 
-            color: "rgba(255,255,255,0.4)", 
-            textTransform: "uppercase", 
-            letterSpacing: "0.15em" 
-          }}>
-            {paperCode || "Study Pack"}
+        {/* Tag floats on top */}
+        <div className="sb-card-tag-float">
+          <span className="sb-tag sb-tag-granted">Unlocked</span>
+        </div>
+
+        {/* Gradient visual with text overlay */}
+        <div 
+          className="sb-card-visual"
+          style={{
+            background: gradient,
+          }}
+        >
+          <div className="sb-card-overlay" />
+          <div className="sb-card-content-overlay">
+            <h3 className="sb-card-title">{title}</h3>
+            <p className="sb-card-meta">
+              {paperCode ? `Q.P. ${paperCode} · ` : ""}
+              {course} · {studyYear}
+              {ORDINAL(studyYear)} Year
+            </p>
           </div>
         </div>
 
-        <span className="sb-tag sb-tag-granted">Access granted</span>
-        <h3 className="sb-card-title">{title}</h3>
-        <p className="sb-card-meta">
-          {paperCode ? `Q.P. ${paperCode} · ` : ""}
-          {course} · {studyYear}
-          {ORDINAL(studyYear)} Year
-        </p>
-        <p className="sb-card-desc">
-          {description ||
-            "Previous-paper intelligence, mark-scoring answers, mocks and revision system."}
-        </p>
-        <div className="sb-card-footer">
-          <span className="sb-card-open">Open</span>
-          <span className="sb-card-arrow" aria-hidden>→</span>
-        </div>
+        {/* Optional compact text section */}
+        {description && (
+          <div className="sb-card-text-compact">
+            <p className="sb-card-desc">{description}</p>
+          </div>
+        )}
       </article>
     </Link>
   );

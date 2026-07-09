@@ -394,6 +394,17 @@ textarea {
 .preview-stack {
   position: relative;
   min-height: 340px;
+  isolation: isolate;
+}
+
+@media (max-width: 959px) {
+  .preview-stack {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+  }
 }
 
 .preview-card {
@@ -402,24 +413,38 @@ textarea {
   padding: 16px 16px 14px;
 }
 
-.preview-card:nth-child(1) {
-  top: 12%;
-  left: 8%;
-  z-index: 3;
+@media (max-width: 959px) {
+  .preview-card {
+    position: relative;
+    width: 100%;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+  }
 }
 
-.preview-card:nth-child(2) {
-  top: 38%;
-  right: 4%;
-  z-index: 2;
-  transform: rotate(2deg);
-}
+@media (min-width: 960px) {
+  .preview-card:nth-child(1) {
+    top: 8%;
+    left: 6%;
+    z-index: 3;
+  }
 
-.preview-card:nth-child(3) {
-  bottom: 4%;
-  left: 18%;
-  z-index: 1;
-  transform: rotate(-2deg);
+  .preview-card:nth-child(2) {
+    top: 34%;
+    right: 2%;
+    z-index: 2;
+    transform: rotate(2deg);
+  }
+
+  .preview-card:nth-child(3) {
+    bottom: 6%;
+    left: 14%;
+    z-index: 1;
+    transform: rotate(-2deg);
+  }
 }
 
 .preview-card .pc-eyebrow {

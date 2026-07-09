@@ -5,7 +5,7 @@ import {
   hashPassword,
 } from "@/lib/crypto/password";
 
-export async function nextStudentId(prefix = "GNM"): Promise<string> {
+export async function nextStudentId(prefix = "STU"): Promise<string> {
   const db = getDb();
   const rows = await db
     .select({ studentId: users.studentId })

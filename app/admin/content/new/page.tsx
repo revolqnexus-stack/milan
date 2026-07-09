@@ -42,11 +42,11 @@ export default function NewContentPage() {
         <form onSubmit={onSubmit}>
           <div className="vault-field">
             <label>Title</label>
-            <input name="title" required placeholder="Community Health Nursing I" />
+            <input name="title" required placeholder="e.g. Organic Chemistry · Semester II" />
           </div>
           <div className="vault-field">
             <label>Course</label>
-            <input name="course" defaultValue="GNM" required />
+            <input name="course" placeholder="e.g. BSc, GNM, BCom, UPSC" required />
           </div>
           <div className="vault-field">
             <label>Study year</label>

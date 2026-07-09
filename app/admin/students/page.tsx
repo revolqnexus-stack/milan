@@ -76,11 +76,11 @@ export default function AdminStudentsPage() {
             <input value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div className="vault-field">
-            <label>Student ID (optional — auto GNM#####)</label>
+            <label>Student ID (optional — auto STU#####)</label>
             <input
               value={studentId}
               onChange={(e) => setStudentId(e.target.value.toUpperCase())}
-              placeholder="GNM10483"
+              placeholder="STU10483"
             />
           </div>
           <VaultButton type="submit">Create + generate password</VaultButton>

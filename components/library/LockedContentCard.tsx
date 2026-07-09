@@ -38,7 +38,7 @@ export function LockedContentCard({
       <div className="card-footer">
         <span className="card-price">{formatPrice(priceInrPaise)}</span>
         <a className="card-cta" href={href} target="_blank" rel="noreferrer">
-          Get access
+          Enquire
         </a>
       </div>
     </GlassPanel>

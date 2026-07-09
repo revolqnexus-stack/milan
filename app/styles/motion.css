@@ -48,6 +48,10 @@
     animation: none !important;
   }
 
+  .preview-card {
+    transform: none !important;
+  }
+
   .device-ring {
     border-color: var(--vault-blue);
   }

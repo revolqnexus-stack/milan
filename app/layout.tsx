@@ -18,7 +18,7 @@ const ui = Inter({
 export const metadata: Metadata = {
   title: "REVOLQNEXUS · Private Study Vault",
   description:
-    "Private exam intelligence for GNM students — previous-paper packs, mark-scoring answers, mocks and revision systems.",
+    "Private exam intelligence for students — previous-paper packs, mark-scoring answers, mocks and revision systems. Enquire for any course.",
 };
 
 const themeBoot = `

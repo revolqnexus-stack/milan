@@ -5,7 +5,17 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { PageEyebrow } from "@/components/ui/PageEyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
+function enquiryUrl() {
+  const base = process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/";
+  const message =
+    "Hi REVOLQNEXUS, I need study material for: [your course / exam / subject]";
+  const joiner = base.includes("?") ? "&" : "?";
+  return `${base}${joiner}text=${encodeURIComponent(message)}`;
+}
+
 export default function HomePage() {
+  const whatsappEnquiry = enquiryUrl();
+
   return (
     <main className="vault-page">
       <div className="landing-shell">
@@ -23,25 +33,25 @@ export default function HomePage() {
           </div>
         </nav>
 
-        <section className="landing-hero motion-fade-up">
-          <div>
+        <section className="landing-hero">
+          <div className="motion-fade-up">
             <PageEyebrow>Built for the paper</PageEyebrow>
             <DisplayHeading>
               Don&apos;t study the whole book.{"\n"}Study the exam.
             </DisplayHeading>
             <p className="body-copy">
               Previous-paper patterns, mark-scoring answers, mocks and last-minute
-              revision systems for GNM students.
+              revision systems — for any course or exam. Message us what you need.
             </p>
             <div className="admin-actions" style={{ marginTop: 22 }}>
               <a
-                href={process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://wa.me/"}
+                href={whatsappEnquiry}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-link-btn"
               >
                 <VaultButton type="button" orb>
-                  Get study access
+                  Send enquiry
                 </VaultButton>
               </a>
               <Link href="/login" className="inline-link-btn">
@@ -51,17 +61,17 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="proof-strip">
+              <span className="proof-chip">Any course · any exam</span>
               <span className="proof-chip">Device-bound private access</span>
-              <span className="proof-chip">Mark-wise answer systems</span>
               <span className="proof-chip">Built from past papers</span>
             </div>
           </div>
 
           <div className="preview-stack" aria-hidden>
             <GlassPanel variant="card" featured className="preview-card">
-              <p className="pc-eyebrow">96% priority</p>
-              <p className="pc-title">Community Health Nursing</p>
-              <p className="pc-meta">12 papers · Q.P. 9114</p>
+              <p className="pc-eyebrow">Your subject</p>
+              <p className="pc-title">Exam-ready packs</p>
+              <p className="pc-meta">Past papers · mark patterns · year tags</p>
             </GlassPanel>
             <GlassPanel variant="card" className="preview-card">
               <p className="pc-eyebrow">Quick revision</p>
@@ -121,23 +131,25 @@ export default function HomePage() {
           <div className="feature-grid" style={{ marginTop: 22 }}>
             <GlassPanel variant="muted" className="feature-card">
               <p className="fn">Step 1</p>
-              <h3>Pay via UPI</h3>
-              <p className="body-copy muted">Message us with the subject you need.</p>
+              <h3>Message us on WhatsApp</h3>
+              <p className="body-copy muted">
+                Tell us your course, exam and subjects — we&apos;ll confirm what we can build.
+              </p>
             </GlassPanel>
             <GlassPanel variant="muted" className="feature-card">
               <p className="fn">Step 2</p>
+              <h3>Pay via UPI</h3>
+              <p className="body-copy muted">Once we confirm your pack, pay and we activate access.</p>
+            </GlassPanel>
+            <GlassPanel variant="muted" className="feature-card">
+              <p className="fn">Step 3</p>
               <h3>Receive Student ID</h3>
               <p className="body-copy muted">Credentials arrive on WhatsApp.</p>
             </GlassPanel>
             <GlassPanel variant="muted" className="feature-card">
-              <p className="fn">Step 3</p>
-              <h3>Bind your browser</h3>
-              <p className="body-copy muted">First login secures this device only.</p>
-            </GlassPanel>
-            <GlassPanel variant="muted" className="feature-card">
               <p className="fn">Step 4</p>
-              <h3>Open your library</h3>
-              <p className="body-copy muted">Only the packs you purchased unlock.</p>
+              <h3>Bind &amp; study</h3>
+              <p className="body-copy muted">First login binds your device. Your library unlocks.</p>
             </GlassPanel>
           </div>
         </section>
@@ -158,7 +170,7 @@ export default function HomePage() {
         </GlassPanel>
 
         <footer className="landing-footer">
-          <span>REVOLQNEXUS · Private GNM study vault</span>
+          <span>REVOLQNEXUS · Private study vault</span>
           <Link href="/admin/login">Admin</Link>
         </footer>
       </div>

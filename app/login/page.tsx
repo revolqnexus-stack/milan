@@ -173,7 +173,7 @@ export default function StudentLoginPage() {
                     id="studentId"
                     value={studentId}
                     onChange={(e) => setStudentId(e.target.value.toUpperCase())}
-                    placeholder="GNM10483"
+                    placeholder="STU10483"
                     autoComplete="username"
                     required
                   />

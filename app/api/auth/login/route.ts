@@ -1,114 +1,66 @@
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { getSql } from "@/lib/db";
+import { z } from "zod";
+import { startStudentLogin } from "@/lib/auth/student-login";
 
 export const runtime = "nodejs";
 
-type Body = {
-  loginId?: string;
-  password?: string;
-  deviceId?: string;
-};
+const bodySchema = z.object({
+  studentId: z.string().min(3).max(40),
+  password: z.string().min(1).max(200),
+});
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as Body;
-    const loginId = (body.loginId || "").trim().toLowerCase();
-    const password = body.password || "";
-    const deviceId = (body.deviceId || "").trim();
-
-    if (!loginId || !password || !deviceId) {
+    const json = await req.json();
+    const parsed = bodySchema.safeParse(json);
+    if (!parsed.success) {
       return NextResponse.json(
-        { ok: false, error: "Login ID, password and device are required." },
+        { ok: false, error: "Enter Student ID and password." },
         { status: 400 }
       );
     }
 
-    if (deviceId.length < 8 || deviceId.length > 120) {
-      return NextResponse.json({ ok: false, error: "Invalid device." }, { status: 400 });
-    }
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      null;
 
-    const sql = getSql();
-    const rows = await sql`
-      SELECT id, login_id, password_hash, device_id, active
-      FROM licences
-      WHERE lower(login_id) = ${loginId}
-      LIMIT 1
-    `;
+    const result = await startStudentLogin({
+      studentId: parsed.data.studentId,
+      password: parsed.data.password,
+      ip,
+    });
 
-    const row = rows[0] as
-      | {
-          id: number;
-          login_id: string;
-          password_hash: string;
-          device_id: string | null;
-          active: boolean;
-        }
-      | undefined;
-
-    if (!row || !row.active) {
+    if (result.status === "ERROR") {
+      const status = result.code === "RATE_LIMITED" ? 429 : 401;
       return NextResponse.json(
-        { ok: false, error: "Wrong Login ID or password." },
-        { status: 401 }
+        { ok: false, error: result.error, code: result.code },
+        { status }
       );
     }
 
-    const passOk = await bcrypt.compare(password, row.password_hash);
-    if (!passOk) {
-      return NextResponse.json(
-        { ok: false, error: "Wrong Login ID or password." },
-        { status: 401 }
-      );
-    }
-
-    if (row.device_id && row.device_id !== deviceId) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error:
-            "This licence is locked to another device. Contact seller for reset (₹200 = 1 device).",
-        },
-        { status: 403 }
-      );
-    }
-
-    if (!row.device_id) {
-      await sql`
-        UPDATE licences
-        SET device_id = ${deviceId}, unlocked_at = NOW()
-        WHERE id = ${row.id} AND device_id IS NULL
-      `;
-      // Re-check in case of race
-      const again = await sql`
-        SELECT device_id FROM licences WHERE id = ${row.id} LIMIT 1
-      `;
-      const bound = (again[0] as { device_id: string | null } | undefined)?.device_id;
-      if (bound && bound !== deviceId) {
-        return NextResponse.json(
-          {
-            ok: false,
-            error:
-              "This licence is locked to another device. Contact seller for reset (₹200 = 1 device).",
-          },
-          { status: 403 }
-        );
-      }
-    } else {
-      await sql`
-        UPDATE licences SET unlocked_at = NOW() WHERE id = ${row.id}
-      `;
+    if (result.status === "REGISTER_DEVICE") {
+      return NextResponse.json({
+        ok: true,
+        next: "REGISTER_DEVICE",
+        registrationToken: result.registrationToken,
+        studentId: result.studentId,
+        name: result.name,
+      });
     }
 
     return NextResponse.json({
       ok: true,
-      loginId: row.login_id,
-      deviceId,
-      message: "Unlocked on this device.",
+      next: "CHALLENGE",
+      challengeId: result.challengeId,
+      challenge: result.challenge,
+      studentId: result.studentId,
+      name: result.name,
     });
   } catch (err) {
-    console.error("login error", err);
+    console.error("login start", err);
     return NextResponse.json(
-      { ok: false, error: "Server error. Try again in a moment." },
+      { ok: false, error: "Server error. Try again." },
       { status: 500 }
     );
   }

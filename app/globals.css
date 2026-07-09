@@ -1,36 +1,34 @@
-:root {
-  --bg: #f0f4f8;
-  --card: #ffffff;
-  --primary: #1a73e8;
-  --primary-dark: #1558b0;
-  --text: #1c1c1e;
-  --subtext: #5f6368;
-  --border: #e8eaed;
-  --green: #34a853;
-  --red: #ea4335;
+@import "./styles/tokens.css";
+@import "./styles/theme.css";
+@import "./styles/typography.css";
+@import "./styles/liquid-glass.css";
+@import "./styles/motion.css";
+@import "./styles/shell.css";
+
+.content-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.content-card .card-orb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(61, 125, 255, 0.18);
+  border: 1px solid rgba(61, 125, 255, 0.35);
+  color: var(--theme-heading);
+  font-size: 14px;
 }
 
-body {
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background:
-    radial-gradient(ellipse at 15% 0%, rgba(26, 115, 232, 0.16), transparent 50%),
-    radial-gradient(ellipse at 90% 100%, rgba(52, 168, 83, 0.1), transparent 45%),
-    var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-a {
-  color: var(--primary);
+.inline-link-btn {
+  display: inline-flex;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+.inline-link-btn > button {
+  width: auto;
 }

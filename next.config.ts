@@ -3,10 +3,11 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
+  serverExternalPackages: ["@node-rs/argon2"],
   async redirects() {
     return [
-      { source: "/chn", destination: "/app.html", permanent: false },
-      { source: "/study", destination: "/app.html", permanent: false },
+      { source: "/app.html", destination: "/library", permanent: false },
+      { source: "/chn", destination: "/library", permanent: false },
     ];
   },
 };

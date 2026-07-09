@@ -1,0 +1,15 @@
+.toggle {
+  border: 1px solid var(--lg-glass-border-soft);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--theme-text-body);
+  border-radius: var(--lg-radius-pill);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: var(--theme-heading);
+  border-color: rgba(61, 125, 255, 0.35);
+}

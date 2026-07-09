@@ -1,0 +1,58 @@
+@keyframes vault-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vault-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.motion-fade-up {
+  animation: vault-fade-up 700ms var(--ease-vault) both;
+}
+
+@keyframes vault-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.device-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid rgba(61, 125, 255, 0.25);
+  border-top-color: var(--vault-blue);
+  animation: vault-sweep 1.1s linear infinite;
+  margin: 0 auto 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-fade-up,
+  .device-ring {
+    animation: none !important;
+  }
+
+  .device-ring {
+    border-color: var(--vault-blue);
+  }
+
+  .glass-card:hover {
+    transform: none;
+  }
+}

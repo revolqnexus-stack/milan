@@ -1,0 +1,64 @@
+.font-display {
+  font-family: var(--font-display), "Times New Roman", serif;
+}
+
+.font-ui,
+.font-body {
+  font-family: var(--font-ui), system-ui, sans-serif;
+}
+
+.page-eyebrow {
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: clamp(11px, 1.8vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--theme-label);
+  margin: 0 0 12px;
+}
+
+.display-heading {
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--theme-heading);
+  margin: 0 0 14px;
+}
+
+.display-heading.sm {
+  font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+  letter-spacing: -0.025em;
+}
+
+.display-heading.md {
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+.body-copy {
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--theme-text-body);
+  margin: 0;
+}
+
+.body-copy.muted {
+  color: var(--theme-text-muted);
+  font-size: 14px;
+}
+
+.brand-mark {
+  font-family: var(--font-display), serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--theme-heading);
+  text-decoration: none;
+}
+
+.brand-mark span {
+  color: var(--vault-blue);
+}

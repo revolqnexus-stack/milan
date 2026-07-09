@@ -1,0 +1,45 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--lg-radius-pill);
+  padding: 5px 10px;
+  border: 1px solid transparent;
+}
+
+.granted {
+  color: var(--theme-success);
+  background: var(--theme-success-soft);
+  border-color: rgba(110, 231, 183, 0.28);
+}
+
+.locked {
+  color: var(--theme-warning);
+  background: var(--theme-warning-soft);
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.active {
+  color: var(--theme-label);
+  background: var(--vault-blue-soft);
+  border-color: rgba(61, 125, 255, 0.28);
+}
+
+.warning {
+  color: var(--theme-warning);
+  background: var(--theme-warning-soft);
+}
+
+.error {
+  color: var(--theme-error);
+  background: var(--theme-error-soft);
+}
+
+.muted {
+  color: var(--theme-text-muted);
+  background: rgba(148, 163, 184, 0.12);
+}

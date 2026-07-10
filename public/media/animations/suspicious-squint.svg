@@ -1,0 +1,77 @@
+<svg width="300" height="280" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes squint {
+      0%,60%,100% { ry: 7; }
+      70%,90% { ry: 3; }
+    }
+    @keyframes raise-brow {
+      0%,60%,100% { transform: translateY(0); }
+      70%,90% { transform: translateY(-4px); }
+    }
+    @keyframes side-eye {
+      0%,50% { transform: translateX(0); }
+      55%,90% { transform: translateX(4px); }
+      95%,100% { transform: translateX(0); }
+    }
+    @keyframes tilt-head {
+      0%,100% { transform: rotate(0deg); }
+      40%,60% { transform: rotate(-4deg); }
+    }
+    .head { animation: tilt-head 4s ease-in-out infinite; transform-origin: 150px 150px; }
+    .eye-ball-l { animation: side-eye 4s ease-in-out infinite; }
+    .eye-ball-r { animation: side-eye 4s ease-in-out infinite; }
+    .lid-l { animation: squint 4s ease-in-out infinite; }
+    .lid-r { animation: squint 4s ease-in-out infinite 0.05s; }
+    .brow-l { animation: raise-brow 4s ease-in-out infinite; transform-origin: 105px 120px; }
+    @media (prefers-reduced-motion: reduce) {
+      .head, .eye-ball-l, .eye-ball-r, .lid-l, .lid-r, .brow-l { animation: none; }
+    }
+  </style>
+
+  <!-- Background -->
+  <ellipse cx="150" cy="165" rx="110" ry="85" fill="#fef3c7" opacity="0.5"/>
+
+  <g class="head">
+    <!-- Head -->
+    <ellipse cx="150" cy="148" rx="76" ry="80" fill="#fde68a"/>
+    <ellipse cx="150" cy="148" rx="76" ry="80" fill="none" stroke="#d97706" stroke-width="2.5"/>
+
+    <!-- Hair -->
+    <path d="M88 120 Q94 68 150 72 Q206 68 212 120" fill="#78350f"/>
+    <path d="M88 120 Q82 90 95 75" fill="none" stroke="#78350f" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Left eyebrow — raised/arched suspiciously -->
+    <g class="brow-l">
+      <path d="M100 120 Q115 110 130 116" fill="none" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <!-- Right eyebrow — flat/low -->
+    <path d="M170 118 Q185 116 200 120" fill="none" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Left eye with squint lid -->
+    <ellipse cx="115" cy="144" rx="14" ry="10" fill="white"/>
+    <g class="eye-ball-l">
+      <ellipse cx="115" cy="144" rx="7" ry="7" fill="#1e293b"/>
+      <ellipse cx="117" cy="141" rx="2.5" ry="2.5" fill="white"/>
+    </g>
+    <!-- Squinting lid -->
+    <ellipse class="lid-l" cx="115" cy="138" rx="14" ry="7" fill="#fde68a" stroke="none"/>
+
+    <!-- Right eye -->
+    <ellipse cx="185" cy="144" rx="14" ry="10" fill="white"/>
+    <g class="eye-ball-r">
+      <ellipse cx="185" cy="144" rx="7" ry="7" fill="#1e293b"/>
+      <ellipse cx="187" cy="141" rx="2.5" ry="2.5" fill="white"/>
+    </g>
+    <ellipse class="lid-r" cx="185" cy="138" rx="14" ry="7" fill="#fde68a" stroke="none"/>
+
+    <!-- Skeptical flat mouth with slight curl -->
+    <path d="M126 178 Q138 174 150 176 Q162 178 170 174" fill="none" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Cheeks -->
+    <ellipse cx="108" cy="164" rx="10" ry="7" fill="#fca5a5" opacity="0.4"/>
+    <ellipse cx="192" cy="164" rx="10" ry="7" fill="#fca5a5" opacity="0.4"/>
+
+    <!-- One raised eyebrow question mark feeling — small sweat -->
+    <text x="216" y="115" font-size="22" font-family="serif" fill="#f59e0b" opacity="0.8">?</text>
+  </g>
+</svg>

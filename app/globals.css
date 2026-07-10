@@ -5,6 +5,7 @@
 @import "./styles/motion.css";
 @import "./styles/shell.css";
 @import "./styles/student-board.css";
+@import "./styles/landing-funnel.css";
 
 .content-card-link {
   text-decoration: none;

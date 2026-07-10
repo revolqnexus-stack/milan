@@ -26,6 +26,7 @@ export default async function AdminLayout({
           <Link href="/admin/content">Study Content</Link>
           <Link href="/admin/content/new">+ Add material</Link>
           <Link href="/admin/students">Students</Link>
+          <Link href="/admin/access-requests">Access Requests</Link>
           <Link href="/admin/entitlements">Entitlements</Link>
           <Link href="/admin/payments">Payments</Link>
           <Link href="/admin/device-resets">Device Resets</Link>

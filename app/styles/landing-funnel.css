@@ -1,0 +1,801 @@
+/* ============================================================
+   LANDING FUNNEL — meme-scroll · unhinged motion design
+   Typography voices:
+     --font-anton   → BIG MEME headlines
+     --font-dm      → readable body/UI copy
+     --font-caveat  → handwritten annotations / doodles
+   ============================================================ */
+
+/* ── Font shorthand classes ── */
+.lf-dm     { font-family: var(--font-dm), "DM Sans", system-ui, sans-serif; }
+.lf-caveat { font-family: var(--font-caveat), "Caveat", cursive; }
+
+/* ── Page shell ── */
+.lf-page {
+  --lf-bg:           #f7f5f0;
+  --lf-bg2:          #f0eef9;
+  --lf-bg3:          #eef8f2;
+  --lf-text:         #1a1a1a;
+  --lf-muted:        #6b6b6b;
+  --lf-accent:       #4f46e5;
+  --lf-warm:         #e55c4f;
+  --lf-border:       #e2ddd5;
+  --lf-surface:      #ffffff;
+  --lf-ink:          #2a2118;
+  --lf-caveat-color: #3a3028;
+
+  min-height: 100dvh;
+  background: var(--lf-bg);
+  color: var(--lf-text);
+  font-family: var(--font-dm), "DM Sans", Inter, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Sticky login pill ── */
+.lf-already-paid {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 200;
+  font-family: var(--font-dm), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--lf-muted);
+  text-decoration: none;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--lf-border);
+  border-radius: 999px;
+  padding: 7px 16px;
+  transition: color 150ms, border-color 150ms;
+  white-space: nowrap;
+}
+.lf-already-paid:hover { color: var(--lf-text); border-color: #c0b8ad; }
+
+/* ── Scene shared ── */
+.lf-scene {
+  min-height: 90svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(52px, 9vw, 88px) clamp(20px, 6vw, 72px);
+  position: relative;
+}
+.lf-scene-hidden { display: none; }
+
+/* ═══════════════════════════════════════════
+   ANNOTATION / DOODLE SYSTEM
+   font-caveat, hand-drawn SVGs
+   ═══════════════════════════════════════════ */
+
+.lf-annotation {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: 600;
+  color: var(--lf-caveat-color);
+  line-height: 1.2;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Scene 1 annotation ── */
+.lf-ann-s1 {
+  position: absolute;
+  bottom: -24px;
+  left: 12px;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+  font-size: 15px;
+}
+
+.lf-ann-arrow-s1 {
+  position: absolute;
+  bottom: -52px;
+  left: 90px;
+  width: 52px;
+  height: 38px;
+  color: var(--lf-caveat-color);
+  opacity: 0.7;
+}
+
+/* ── Scene 2 annotation ── */
+.lf-ann-s2 {
+  margin-top: 14px;
+  display: inline-block;
+  transform: rotate(-2deg);
+  font-size: 17px;
+  opacity: 0.85;
+}
+
+/* ── Scene 3 annotations ── */
+.lf-ann-drills {
+  display: block;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 4px;
+  transform: rotate(2deg);
+  opacity: 0.8;
+}
+
+.lf-ann-mocks {
+  display: block;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 4px;
+  transform: rotate(-1.5deg);
+  opacity: 0.8;
+}
+
+/* ── Scene 4 annotation ── */
+.lf-ann-capitalism {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  transform: rotate(-2deg);
+  opacity: 0.75;
+}
+
+/* ── Connectors between scenes ── */
+.lf-connector {
+  position: absolute;
+  bottom: -48px;
+  left: clamp(20px, 6vw, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  z-index: 10;
+}
+
+.lf-connector-center {
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.lf-connector-squiggle {
+  width: 24px;
+  height: 52px;
+  color: var(--lf-muted);
+  opacity: 0.45;
+}
+
+.lf-connector-note {
+  font-size: 13px;
+  opacity: 0.7;
+  transform: rotate(-1deg);
+}
+
+.lf-connector-anyway {
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* ── Underline doodle (scene 3) ── */
+.lf-right-place {
+  position: relative;
+  display: inline-block;
+}
+
+.lf-underline-doodle {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  color: var(--lf-warm);
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── Highlight word (scene 3) ── */
+.lf-highlight-word {
+  position: relative;
+  display: inline;
+  background: linear-gradient(90deg, #fef08a 0%, #fde047 100%);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+/* ═══════════════════════════════════════════
+   SCENE 1 — bruh. do you wanna pass?
+   ═══════════════════════════════════════════ */
+
+.lf-s1 { background: var(--lf-bg); }
+
+.lf-s1-inner {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (min-width: 760px) {
+  .lf-s1-inner { grid-template-columns: 1fr 1.15fr; gap: 64px; }
+}
+
+/* GIF frames */
+.lf-s1-media-col { position: relative; display: flex; justify-content: center; }
+
+.lf-meme-frame {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  display: inline-block;
+}
+.lf-meme-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* scene 1 — slightly rotated with paper-like border */
+.lf-meme-frame-tilt {
+  transform: rotate(-2.5deg);
+  box-shadow: 0 6px 32px rgba(30,20,10,0.14), 0 0 0 3px rgba(255,255,255,0.9), 0 0 0 4px rgba(180,165,148,0.3);
+  width: clamp(200px, 44vw, 320px);
+  transition: transform 300ms ease;
+}
+.lf-meme-frame-tilt:hover { transform: rotate(-1deg) scale(1.015); }
+
+/* scene 2 — tighter, reaction-image crop */
+.lf-meme-frame-tight {
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,20,10,0.12);
+  width: clamp(180px, 40vw, 300px);
+  transition: transform 300ms ease;
+}
+.lf-meme-frame-tight:hover { transform: rotate(0.5deg) scale(1.01); }
+
+/* scene 3 — centered, clean */
+.lf-meme-frame-center {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(30,20,10,0.1);
+  width: clamp(150px, 38vw, 240px);
+}
+
+/* scene 4 — asymmetric */
+.lf-meme-frame-asym {
+  border-radius: 24px 12px 24px 12px;
+  box-shadow: 0 8px 36px rgba(30,20,10,0.14);
+  width: clamp(180px, 38vw, 280px);
+  transition: transform 300ms ease;
+}
+.lf-meme-frame-asym:hover { transform: rotate(-0.6deg) scale(1.01); }
+
+/* ── Copy column ── */
+.lf-s1-copy { display: flex; flex-direction: column; gap: 22px; }
+
+/* VOICE 1 — Anton */
+.lf-bruh {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(5rem, 15vw, 10rem);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.lf-question-wrap { display: flex; flex-direction: column; gap: 4px; }
+
+.lf-question-line {
+  font-family: var(--font-dm), "DM Sans", sans-serif;
+  font-size: clamp(1rem, 2.8vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--lf-text);
+  margin: 0;
+}
+
+.lf-pass-slam {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 400;
+  color: var(--lf-warm);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.lf-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════ */
+
+.lf-btn-yes {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-dm), "DM Sans", sans-serif;
+  font-size: clamp(0.9rem, 2.2vw, 1rem);
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--lf-text);
+  color: #fff;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.2);
+  /* hover/tap handled by Framer */
+}
+.lf-btn-yes.lf-btn-flash { background: #333; }
+
+.lf-btn-s3 { margin-top: 8px; }
+
+.lf-btn-nah {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-dm), "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lf-muted);
+  background: transparent;
+  border: 1.5px solid var(--lf-border);
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.lf-btn-nah.shook {
+  animation: lf-shake 440ms cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes lf-shake {
+  0%,100% { transform: translateX(0) rotate(0deg); }
+  12%  { transform: translateX(-7px) rotate(-2deg); }
+  28%  { transform: translateX(7px) rotate(2deg); }
+  44%  { transform: translateX(-5px) rotate(-1.5deg); }
+  60%  { transform: translateX(5px) rotate(1.5deg); }
+  76%  { transform: translateX(-3px) rotate(-0.8deg); }
+  88%  { transform: translateX(3px) rotate(0.8deg); }
+}
+
+.lf-nah-response-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.lf-nah-response {
+  font-size: 13px;
+  color: var(--lf-muted);
+  font-weight: 600;
+}
+.lf-nah-arrow {
+  width: 48px;
+  height: 22px;
+  color: var(--lf-caveat-color);
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+/* YES MF button + burst */
+.lf-yes-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-yes-burst {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  color: var(--lf-warm);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.lf-btn-big {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 18px 44px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--lf-warm);
+  color: #fff;
+  box-shadow: 0 6px 30px rgba(229,92,79,0.4);
+  text-transform: uppercase;
+}
+
+.lf-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding: 18px 40px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--lf-text);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.22);
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   SCENE 2 — really bruh?
+   ═══════════════════════════════════════════ */
+
+.lf-s2 { background: var(--lf-bg2); }
+
+.lf-s2-inner {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (min-width: 760px) {
+  .lf-s2-inner { grid-template-columns: 1.15fr 1fr; gap: 64px; }
+}
+
+.lf-big-text { display: flex; flex-direction: column; gap: 14px; }
+
+.lf-really {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(4rem, 13vw, 9rem);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.lf-like-actually {
+  font-size: clamp(1rem, 2.8vw, 1.6rem);
+  font-weight: 600;
+  color: var(--lf-muted);
+  margin: 0;
+}
+
+.lf-s2-actions { margin-top: 10px; }
+
+.lf-meme-right { display: flex; align-items: center; justify-content: center; }
+
+/* ═══════════════════════════════════════════
+   SCENE 3 — yo. right place biatch.
+   ═══════════════════════════════════════════ */
+
+.lf-s3 { background: var(--lf-bg3); }
+
+.lf-s3-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.lf-s3-meme {
+  width: clamp(150px, 38vw, 240px);
+  height: auto;
+  display: block;
+}
+
+.lf-yo {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(5rem, 16vw, 11rem);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.lf-right-place {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.3rem, 4vw, 2.4rem);
+  font-weight: 400;
+  color: var(--lf-text);
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+.lf-body-copy {
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  font-weight: 500;
+  color: var(--lf-muted);
+  line-height: 1.65;
+  max-width: 520px;
+  margin: 0;
+}
+
+/* fragments — thrown-notes */
+.lf-fragments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.lf-fragment-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* rotation set by framer per-fragment */
+}
+
+.lf-fragment {
+  font-family: var(--font-dm), "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 12px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 3px 12px rgba(30,20,10,0.08);
+}
+
+.lf-fragment-green  { background: #dcfce7; color: #15803d; border: 1.5px solid #bbf7d0; }
+.lf-fragment-blue   { background: #dbeafe; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
+.lf-fragment-orange { background: #ffedd5; color: #c2410c; border: 1.5px solid #fed7aa; }
+
+/* ═══════════════════════════════════════════
+   SCENE 4 — come here. + epic arrow + CTA
+   ═══════════════════════════════════════════ */
+
+.lf-s4 {
+  background: var(--lf-bg);
+  min-height: 100svh;
+}
+
+.lf-s4-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 860px) {
+  .lf-s4-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0 56px;
+    align-items: start;
+  }
+  .lf-s4-left    { grid-column: 1; grid-row: 1; }
+  .lf-s4-arrow-zone { grid-column: 1 / -1; grid-row: 2; }
+  .lf-cta-card   { grid-column: 2; grid-row: 1 / 3; align-self: center; padding-top: 20px; }
+}
+
+.lf-s4-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.lf-come-here {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(3.5rem, 11vw, 8rem);
+  font-weight: 400;
+  /* letter-spacing animated by framer */
+  line-height: 0.88;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* ── Epic arrow SVG ── */
+.lf-s4-arrow-zone { width: 100%; overflow: visible; }
+
+.lf-epic-arrow-desktop {
+  width: 100%;
+  height: 140px;
+  overflow: visible;
+  display: none;
+}
+.lf-epic-arrow-mobile {
+  width: 100px;
+  height: 180px;
+  overflow: visible;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (min-width: 860px) {
+  .lf-epic-arrow-desktop { display: block; }
+  .lf-epic-arrow-mobile  { display: none; }
+}
+
+/* ghost stroke — gives pen texture */
+.lf-arrow-ghost {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.06;
+}
+
+/* main stroke */
+.lf-arrow-main {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* arrowhead — two drawn strokes */
+.lf-arrowhead-stroke {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* "this way genius" mid-arrow annotation */
+.lf-arrow-note {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--lf-caveat-color);
+  transform: rotate(-4deg);
+  transform-origin: center;
+}
+
+/* ── CTA card ── */
+.lf-cta-card {
+  background: var(--lf-surface);
+  border: 2px solid var(--lf-border);
+  border-radius: 28px;
+  padding: clamp(24px, 5vw, 40px);
+  max-width: 420px;
+  box-shadow: 0 8px 44px rgba(0,0,0,0.09);
+  position: relative;
+}
+
+.lf-boring-money {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lf-muted);
+  margin: 0 0 8px;
+}
+
+.lf-cta-tagline {
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  color: var(--lf-muted);
+  line-height: 1.6;
+  margin: 18px 0 0;
+}
+
+/* ── Footer ── */
+.lf-footer {
+  padding: 24px clamp(20px,5vw,48px);
+  border-top: 1px solid var(--lf-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #9a9490;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lf-footer-link {
+  color: #9a9490;
+  text-decoration: none;
+}
+.lf-footer-link:hover { color: var(--lf-text); }
+
+/* ═══════════════════════════════════════════
+   ACCESS PAGES (kept from previous pass)
+   ═══════════════════════════════════════════ */
+
+.access-page {
+  --sb-bg: #f6f4ef;
+  --sb-surface: #ffffff;
+  --sb-border: #e6e0d8;
+  --sb-text: #1f1f1f;
+  --sb-text-muted: #6b6b6b;
+  --sb-accent: #4f46e5;
+  min-height: 100dvh;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  position: relative;
+}
+.access-already-paid {
+  position: fixed; top: 14px; right: 16px; z-index: 100;
+  font-size: 11px; font-weight: 700; color: var(--sb-text-muted);
+  text-decoration: none; background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px); border: 1px solid var(--sb-border);
+  border-radius: 999px; padding: 7px 14px; white-space: nowrap;
+  transition: color 150ms;
+}
+.access-already-paid:hover { color: var(--sb-text); }
+.access-shell { max-width: 800px; margin: 0 auto; padding: clamp(40px,8vw,72px) clamp(20px,5vw,40px) 80px; }
+.access-shell-narrow { max-width: 540px; }
+.access-back { display: inline-flex; font-size: 12px; font-weight: 700; color: var(--sb-text-muted); text-decoration: none; margin-bottom: 28px; }
+.access-back:hover { color: var(--sb-text); }
+.access-header { margin-bottom: 36px; }
+.access-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sb-text-muted); margin: 0 0 10px; }
+.access-heading { font-size: clamp(2rem,6vw,3.2rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1; color: var(--sb-text); margin: 0 0 8px; }
+.access-sub { font-size: 15px; color: var(--sb-text-muted); margin: 0; }
+.access-packs { display: grid; gap: 14px; }
+.access-pack-card { background: var(--sb-surface); border: 1.5px solid var(--sb-border); border-radius: 22px; padding: 22px 24px; box-shadow: 0 2px 12px rgba(30,20,10,0.06); transition: box-shadow 200ms, border-color 200ms; }
+.access-pack-card:hover { box-shadow: 0 6px 24px rgba(30,20,10,0.1); border-color: rgba(79,70,229,0.3); }
+.access-pack-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.access-pack-course { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sb-text-muted); }
+.access-pack-code { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--sb-accent); background: rgba(79,70,229,0.08); border-radius: 999px; padding: 3px 10px; }
+.access-pack-title { font-size: clamp(1rem,2.5vw,1.25rem); font-weight: 800; color: var(--sb-text); margin: 0 0 6px; letter-spacing: -0.02em; }
+.access-pack-title-lg { font-size: clamp(1.4rem,4vw,2rem); margin: 0 0 12px; }
+.access-pack-desc { font-size: 13px; color: var(--sb-text-muted); line-height: 1.5; margin: 0 0 16px; }
+.access-pack-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+.access-pack-price { font-size: 1.4rem; font-weight: 800; color: var(--sb-text); letter-spacing: -0.03em; }
+.access-pack-price-lg { font-size: clamp(1.6rem,5vw,2.4rem); font-weight: 800; color: var(--sb-text); letter-spacing: -0.04em; margin: 8px 0 28px; }
+.access-pack-cta { display: inline-flex; align-items: center; font-size: 13px; font-weight: 800; letter-spacing: 0.03em; color: #fff; background: var(--sb-text); border-radius: 999px; padding: 11px 22px; text-decoration: none; transition: transform 150ms, box-shadow 150ms; }
+.access-pack-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.access-pack-detail { margin-bottom: 32px; padding-bottom: 28px; border-bottom: 1.5px solid var(--sb-border); }
+.access-form { display: flex; flex-direction: column; gap: 16px; }
+.access-form-heading { font-size: 15px; font-weight: 700; color: var(--sb-text); margin: 0 0 4px; }
+.access-field { display: flex; flex-direction: column; gap: 6px; }
+.access-field label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--sb-text-muted); }
+.access-field-optional { font-weight: 500; text-transform: none; letter-spacing: 0; }
+.access-field input { width: 100%; border: 1.5px solid var(--sb-border); border-radius: 14px; background: var(--sb-surface); color: var(--sb-text); padding: 13px 16px; font-family: inherit; font-size: 15px; outline: none; transition: border-color 160ms; box-sizing: border-box; }
+.access-field input:focus { border-color: var(--sb-accent); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+.access-field input::placeholder { color: #c0b8b0; }
+.access-form-error { font-size: 13px; color: #c0392b; padding: 10px 14px; background: #fef2f2; border-radius: 10px; margin: 0; }
+.access-submit { display: flex; align-items: center; justify-content: center; font-family: inherit; font-size: 1rem; font-weight: 800; padding: 16px 28px; border-radius: 999px; border: none; cursor: pointer; background: var(--sb-text); color: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.16); transition: transform 160ms, box-shadow 160ms; margin-top: 4px; }
+.access-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,0,0,0.22); }
+.access-submit:disabled { opacity: 0.6; cursor: wait; }
+.access-form-note { font-size: 12px; color: var(--sb-text-muted); margin: 0; line-height: 1.5; }
+.access-form-note-em { font-weight: 700; }
+.access-success { display: flex; flex-direction: column; gap: 10px; padding: 32px 0; }
+.access-success-big { font-size: clamp(3rem,10vw,5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; color: var(--sb-text); margin: 0; }
+.access-success-sub { font-size: clamp(1.2rem,3vw,1.6rem); font-weight: 800; color: var(--sb-text); margin: 0; }
+.access-success-body { font-size: 15px; color: var(--sb-text-muted); margin: 8px 0 0; line-height: 1.55; }
+.access-success-note { font-size: 13px; color: var(--sb-text-muted); margin: 12px 0 0; }
+.access-footer-note { margin-top: 40px; font-size: 13px; color: var(--sb-text-muted); text-align: center; }
+.access-footer-link { color: var(--sb-accent); text-decoration: none; font-weight: 700; }
+.access-empty { text-align: center; padding: 48px 0; color: var(--sb-text-muted); }
+.access-empty-sub { font-size: 13px; margin-top: 8px; }
+
+/* ═══════════════════════════════════════════
+   REDUCED MOTION OVERRIDES
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .lf-btn-nah.shook  { animation: none; }
+  .lf-btn-yes,
+  .lf-btn-nah,
+  .lf-btn-big,
+  .lf-cta-btn        { transition: none; }
+  .lf-arrow-main,
+  .lf-arrow-ghost,
+  .lf-arrowhead-stroke { transition: none !important; stroke-dashoffset: 0 !important; }
+  .lf-arrow-note     { opacity: 1 !important; }
+}

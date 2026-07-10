@@ -1,0 +1,97 @@
+<svg width="320" height="300" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes beckon {
+      0%,100% { transform: rotate(-10deg); }
+      35% { transform: rotate(20deg); }
+      60% { transform: rotate(-5deg); }
+    }
+    @keyframes lean {
+      0%,100% { transform: rotate(0deg) translateX(0); }
+      40% { transform: rotate(4deg) translateX(5px); }
+    }
+    @keyframes blink {
+      0%,80%,100% { ry: 8; }
+      85%,92% { ry: 1; }
+    }
+    @keyframes eyebrow-raise {
+      0%,100% { transform: translateY(0); }
+      40% { transform: translateY(-3px); }
+    }
+    @keyframes point-pulse {
+      0%,100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    .figure { animation: lean 2.2s ease-in-out infinite; transform-origin: 155px 240px; }
+    .right-arm { animation: beckon 1.4s ease-in-out infinite; transform-origin: 196px 195px; }
+    .eye-l { animation: blink 3s ease-in-out infinite; }
+    .eye-r { animation: blink 3s ease-in-out infinite 0.08s; }
+    .brow-r { animation: eyebrow-raise 2.2s ease-in-out infinite; transform-origin: 185px 148px; }
+    .pulse { animation: point-pulse 1.4s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .figure, .right-arm, .eye-l, .eye-r, .brow-r, .pulse { animation: none; }
+    }
+  </style>
+
+  <!-- Pointing pulse rings -->
+  <g class="pulse">
+    <circle cx="268" cy="195" r="22" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4 4"/>
+    <circle cx="268" cy="195" r="14" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+  </g>
+
+  <g class="figure">
+    <!-- Body / torso -->
+    <rect x="122" y="208" width="66" height="68" rx="16" fill="#6d28d9"/>
+
+    <!-- Head -->
+    <ellipse cx="155" cy="175" rx="54" ry="58" fill="#fde68a"/>
+    <ellipse cx="155" cy="175" rx="54" ry="58" fill="none" stroke="#d97706" stroke-width="2.5"/>
+
+    <!-- Hair side-parted -->
+    <path d="M105 152 Q110 104 155 108 Q200 104 205 152" fill="#92400e"/>
+    <path d="M105 152 Q100 125 112 108" fill="none" stroke="#92400e" stroke-width="9" stroke-linecap="round"/>
+    <!-- Side part line -->
+    <path d="M155 108 Q148 95 150 86" fill="none" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Eyes -->
+    <ellipse class="eye-l" cx="136" cy="175" rx="11" ry="8" fill="white"/>
+    <ellipse cx="136" cy="175" rx="6" ry="6" fill="#1e293b"/>
+    <ellipse cx="138" cy="172" rx="2" ry="2" fill="white"/>
+
+    <ellipse class="eye-r" cx="174" cy="175" rx="11" ry="8" fill="white"/>
+    <ellipse cx="174" cy="175" rx="6" ry="6" fill="#1e293b"/>
+    <ellipse cx="176" cy="172" rx="2" ry="2" fill="white"/>
+
+    <!-- Eyebrows — one raised with beckoning energy -->
+    <path d="M123 156 Q136 148 149 154" fill="none" stroke="#92400e" stroke-width="3.5" stroke-linecap="round"/>
+    <g class="brow-r">
+      <path d="M160 152 Q174 143 187 150" fill="none" stroke="#92400e" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Smirk-y confident smile -->
+    <path d="M137 196 Q155 208 177 196" fill="#fff" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M137 196 Q155 208 177 196" fill="#f87171" opacity="0.3"/>
+
+    <!-- Cheeks -->
+    <ellipse cx="114" cy="188" rx="11" ry="7" fill="#fca5a5" opacity="0.45"/>
+    <ellipse cx="196" cy="188" rx="11" ry="7" fill="#fca5a5" opacity="0.45"/>
+
+    <!-- Left arm relaxed -->
+    <path d="M122 220 Q100 238 92 256" fill="none" stroke="#fde68a" stroke-width="15" stroke-linecap="round"/>
+    <circle cx="90" cy="260" r="11" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+
+    <!-- Right arm — beckoning / pointing outward right -->
+    <g class="right-arm">
+      <path d="M188 215 Q216 205 244 195" fill="none" stroke="#fde68a" stroke-width="15" stroke-linecap="round"/>
+      <!-- Hand with pointing finger -->
+      <circle cx="250" cy="193" r="13" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+      <!-- Finger pointing right -->
+      <path d="M258 190 L275 188 L278 193 L260 196 Z" fill="#fde68a" stroke="#d97706" stroke-width="1"/>
+    </g>
+
+    <!-- Legs -->
+    <path d="M140 274 Q136 284 134 294" fill="none" stroke="#6d28d9" stroke-width="15" stroke-linecap="round"/>
+    <path d="M168 274 Q172 284 174 294" fill="none" stroke="#6d28d9" stroke-width="15" stroke-linecap="round"/>
+    <ellipse cx="132" cy="296" rx="13" ry="6" fill="#1e293b"/>
+    <ellipse cx="176" cy="296" rx="13" ry="6" fill="#1e293b"/>
+  </g>
+</svg>

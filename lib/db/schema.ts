@@ -289,3 +289,40 @@ export const loginAttempts = pgTable(
     index("login_attempts_created_idx").on(t.createdAt),
   ]
 );
+
+export const accessRequestStatusEnum = pgEnum("access_request_status", [
+  "PENDING",
+  "CONTACTED",
+  "PAID",
+  "APPROVED",
+  "REJECTED",
+]);
+
+export const accessRequests = pgTable(
+  "access_requests",
+  {
+    id: serial("id").primaryKey(),
+    contentId: integer("content_id")
+      .notNull()
+      .references(() => content.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    phone: text("phone").notNull(),
+    college: text("college"),
+    status: accessRequestStatusEnum("status").notNull().default("PENDING"),
+    adminNotes: text("admin_notes"),
+    linkedUserId: integer("linked_user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    index("access_requests_content_id_idx").on(t.contentId),
+    index("access_requests_status_idx").on(t.status),
+    index("access_requests_created_idx").on(t.createdAt),
+  ]
+);

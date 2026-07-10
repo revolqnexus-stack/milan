@@ -1,6 +1,6 @@
 import styles from "./StatusChip.module.css";
 
-type Status = "granted" | "locked" | "active" | "warning" | "error" | "muted";
+type Status = "granted" | "locked" | "active" | "warning" | "error" | "muted" | "pending" | "info";
 
 const labels: Record<Status, string> = {
   granted: "Access granted",
@@ -9,6 +9,8 @@ const labels: Record<Status, string> = {
   warning: "Warning",
   error: "Error",
   muted: "Info",
+  pending: "Pending",
+  info: "Info",
 };
 
 export function StatusChip({

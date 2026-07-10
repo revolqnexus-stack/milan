@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useInView } from "framer-motion";
 import "@/app/styles/landing-funnel.css";
 
-/* ─── helpers ─────────────────────────────────────────────── */
+/* ─── helpers ──────────────────────────────────────────────── */
 function useMediaQuery(q: string) {
   const [m, setM] = useState(false);
   useEffect(() => {
@@ -29,424 +29,414 @@ const slideLeft: Variants = {
   hidden: { x: -60, opacity: 0 },
   show:   { x: 0, opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
 };
-const overshoot: Variants = {
-  hidden: { x: -80, opacity: 0 },
-  show:   { x: 0, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 18 } },
-};
 const fadeUp: Variants = {
-  hidden: { y: 14, opacity: 0 },
-  show:   { y: 0, opacity: 1, transition: { duration: 0.38, ease: "easeOut" } },
+  hidden: { y: 18, opacity: 0 },
+  show:   { y: 0, opacity: 1, transition: { duration: 0.42, ease: "easeOut" } },
 };
 const noteIn: Variants = {
-  hidden: { rotate: -4, scale: 0.8, opacity: 0 },
-  show:   { rotate: 0, scale: 1, opacity: 1, transition: { type: "spring", stiffness: 400, damping: 20, delay: 0.18 } },
+  hidden: { rotate: -4, scale: 0.82, opacity: 0 },
+  show:   { rotate: 0, scale: 1, opacity: 1,
+            transition: { type: "spring", stiffness: 400, damping: 20, delay: 0.2 } },
 };
 const ctaBounce: Variants = {
   hidden: { scale: 0.94, opacity: 0 },
-  show:   { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 22, delay: 0.1 } },
+  show:   { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 22 } },
 };
-
-/* fragment entry — thrown-notes effect */
 const frag = (deg: number, delay: number): Variants => ({
-  hidden: { rotate: deg * 2, y: -24, opacity: 0, scale: 0.88 },
+  hidden: { rotate: deg * 2, y: -20, opacity: 0, scale: 0.88 },
   show:   { rotate: deg, y: 0, opacity: 1, scale: 1,
             transition: { type: "spring", stiffness: 360, damping: 20, delay } },
 });
 
+/* ─── InView wrapper for scroll-triggered entrance ────────── */
+function InView({
+  children, delay = 0, variants = fadeUp, className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  variants?: Variants;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      variants={reduced ? undefined : variants}
+      initial="hidden"
+      animate={inView ? "show" : "hidden"}
+      transition={delay ? { delay } : undefined}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 /* ─── main component ───────────────────────────────────────── */
 export default function HomePage() {
   const reduced = useReducedMotion();
-  const [scene, setScene]               = useState(1);
-  const [nahClicked, setNahClicked]     = useState(false);
-  const [nahShook, setNahShook]         = useState(false);
-  const [yesFlash, setYesFlash]         = useState(false);
-  // s2 staged reveals
-  const [showReally, setShowReally]     = useState(false);
-  const [showActually, setShowActually] = useState(false);
-  const [showYesMf, setShowYesMf]       = useState(false);
-  const [showS2Note, setShowS2Note]     = useState(false);
-  // s4 arrow
-  const [arrowPhase, setArrowPhase]     = useState(0); // 0=hidden 1=drawing 2=done
-
-  const s2Ref = useRef<HTMLElement>(null);
-  const s3Ref = useRef<HTMLElement>(null);
-  const s4Ref = useRef<HTMLElement>(null);
-
-  function scrollTo(ref: React.RefObject<HTMLElement | null>) {
-    setTimeout(() => ref.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }), 80);
-  }
-
-  function goToScene2() {
-    if (reduced) { setScene(2); setShowReally(true); setShowActually(true); setShowYesMf(true); scrollTo(s2Ref); return; }
-    setYesFlash(true);
-    setTimeout(() => { setYesFlash(false); setScene(2); scrollTo(s2Ref); }, 220);
-    setTimeout(() => setShowReally(true), 820);
-    setTimeout(() => setShowActually(true), 1540);
-    setTimeout(() => setShowYesMf(true), 2200);
-    setTimeout(() => setShowS2Note(true), 2500);
-  }
-
-  function goToScene3() { setScene(3); scrollTo(s3Ref); }
-
-  function goToScene4() {
-    setScene(4); scrollTo(s4Ref);
-    if (reduced) { setArrowPhase(2); return; }
-    setTimeout(() => setArrowPhase(1), 500);
-    setTimeout(() => setArrowPhase(2), 2800);
-  }
-
-  function handleNah() {
-    setNahShook(true); setNahClicked(true);
-    setTimeout(() => setNahShook(false), 500);
-  }
 
   return (
     <div className="lf-page">
-      <Link href="/login" className="lf-already-paid">i already paid 🙄</Link>
 
-      {/* ════════════════ SCENE 1 ════════════════ */}
-      <section className="lf-scene lf-s1">
-        <div className="lf-s1-inner">
+      {/* ════ NAV ════ */}
+      <nav className="lf-nav" aria-label="Main navigation">
+        <span className="lf-nav-brand">REVOLQNEXUS</span>
+        <Link href="/login" className="lf-already-paid">i already paid 🙄</Link>
+      </nav>
 
-          {/* GIF — slightly rotated frame, annotated */}
-          <div className="lf-s1-media-col">
+      {/* ════ HERO ════ */}
+      <section className="lf-scene lf-hero">
+        <div className="lf-hero-inner">
+
+          {/* Copy column */}
+          <div className="lf-hero-copy">
+            <motion.h1
+              className="lf-hero-headline"
+              variants={reduced ? undefined : stamp}
+              initial="hidden" animate="show"
+            >
+              <span className="lf-headline-em">Pass</span>{" "}the paper.{" "}
+              <br className="lf-hero-br" />
+              Study what{" "}
+              <span className="lf-headline-em">repeats.</span>
+            </motion.h1>
+
+            <motion.p
+              className="lf-hero-sub lf-dm"
+              variants={reduced ? undefined : fadeUp}
+              initial="hidden" animate="show"
+              transition={{ delay: 0.3 }}
+            >
+              We analyse previous-year nursing question papers, find recurring
+              exam patterns and turn them into mark-scoring study packs.
+            </motion.p>
+
+            <motion.div
+              className="lf-hero-actions"
+              variants={reduced ? undefined : fadeUp}
+              initial="hidden" animate="show"
+              transition={{ delay: 0.48 }}
+            >
+              <motion.a
+                href="#packs"
+                className="lf-btn-primary"
+                whileHover={reduced ? undefined : { rotate: -1, scale: 1.03 }}
+                whileTap={reduced ? undefined : { scale: 0.93 }}
+              >
+                SEE STUDY PACKS →
+              </motion.a>
+              <motion.a
+                href="#what-you-get"
+                className="lf-btn-ghost lf-dm"
+                whileHover={reduced ? undefined : { scale: 1.02 }}
+                whileTap={reduced ? undefined : { scale: 0.96 }}
+              >
+                HOW IT WORKS
+              </motion.a>
+            </motion.div>
+          </div>
+
+          {/* GIF 1 — study frustration */}
+          <motion.div
+            className="lf-hero-media"
+            variants={reduced ? undefined : { hidden: { rotate: -4, scale: 0.9, opacity: 0 }, show: { rotate: -2.5, scale: 1, opacity: 1, transition: { type: "spring", stiffness: 280, damping: 22, delay: 0.18 } } }}
+            initial="hidden" animate="show"
+          >
             <div className="lf-meme-frame lf-meme-frame-tilt">
               <img
-                src="/media/study-culture/scene1-study-stress.gif"
-                alt="stressed student staring at books"
+                src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeDMzZHlpdHA0Nm5tYmxqaGNnZDNsZHAwNHU3emw2YTZnczdrZXQ4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/O5YkfFsYBRIbJMSxwr/giphy.gif"
+                alt="student staring at books not working"
                 width={340} height={300}
                 fetchPriority="high"
               />
-              {/* annotation */}
-              <span className="lf-annotation lf-ann-s1">studying btw</span>
-              {/* wonky arrow pointing at gif */}
-              <svg className="lf-ann-arrow lf-ann-arrow-s1" viewBox="0 0 70 50" aria-hidden="true">
+              <span className="lf-annotation lf-ann-hero">studying everything is crazy btw</span>
+              <svg className="lf-ann-arrow lf-ann-arrow-hero" viewBox="0 0 70 50" aria-hidden="true">
                 <path d="M 60 8 C 50 5, 30 12, 18 28 C 10 38, 12 44, 16 46" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
                 <path d="M 10 43 L 16 46 L 14 39" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-          </div>
-
-          {/* Copy column */}
-          <div className="lf-s1-copy">
-            <motion.h1
-              className="lf-bruh"
-              variants={reduced ? undefined : stamp}
-              initial="hidden" animate="show"
-            >
-              bruh.
-            </motion.h1>
-
-            <motion.div
-              className="lf-question-wrap"
-              variants={reduced ? undefined : fadeUp}
-              initial="hidden" animate="show"
-              transition={{ delay: 0.25 }}
-            >
-              <p className="lf-question-line lf-dm">do you actually wanna</p>
-              <p className="lf-question-line">
-                <span className="lf-dm">pass</span>
-                <motion.span
-                  className="lf-pass-slam"
-                  variants={reduced ? undefined : stamp}
-                  initial="hidden" animate="show"
-                  transition={{ delay: 0.55 }}
-                >
-                  PASS?
-                </motion.span>
-              </p>
-              <p className="lf-question-line lf-dm">or are we just opening books for decoration?</p>
-            </motion.div>
-
-            <motion.div
-              className="lf-actions"
-              variants={reduced ? undefined : fadeUp}
-              initial="hidden" animate="show"
-              transition={{ delay: 0.7 }}
-            >
-              <motion.button
-                className={`lf-btn-yes${yesFlash ? " lf-btn-flash" : ""}`}
-                onClick={goToScene2}
-                whileHover={reduced ? undefined : { rotate: -1, scale: 1.03 }}
-                whileTap={reduced ? undefined : { scale: 0.93 }}
-              >
-                yeah i wanna pass 😭
-              </motion.button>
-
-              <motion.button
-                className={`lf-btn-nah${nahShook ? " shook" : ""}`}
-                onClick={handleNah}
-                initial="rest"
-                whileHover={reduced ? undefined : "hover"}
-                variants={reduced ? undefined : {
-                  rest:  { x: 0 },
-                  hover: { x: nahClicked ? 0 : 10, rotate: 1.5, transition: { type: "spring", stiffness: 500 } },
-                }}
-              >
-                nah i&apos;m cooked
-              </motion.button>
-
-              <AnimatePresence>
-                {nahClicked && (
-                  <motion.div
-                    className="lf-nah-response-wrap"
-                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  >
-                    <span className="lf-dm lf-nah-response">valid.&nbsp; but click the other one. 😭</span>
-                    {/* tiny arrow pointing back at yes button */}
-                    <svg className="lf-nah-arrow" viewBox="0 0 60 28" aria-hidden="true">
-                      <path d="M 56 24 C 40 26, 20 20, 8 8" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-                      <path d="M 4 12 L 8 8 L 14 12" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* scene connector squiggle */}
-        <div className="lf-connector" aria-hidden="true">
-          <svg viewBox="0 0 40 80" className="lf-connector-squiggle">
-            <path d="M 20 0 C 30 15, 10 25, 20 40 C 30 55, 10 65, 20 80" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
-          </svg>
-          <span className="lf-annotation lf-connector-note">bro actually clicked yes</span>
+          </motion.div>
         </div>
       </section>
 
-      {/* ════════════════ SCENE 2 ════════════════ */}
-      <section
-        ref={s2Ref}
-        className={`lf-scene lf-s2${scene < 2 ? " lf-scene-hidden" : ""}`}
-        aria-hidden={scene < 2}
-      >
-        <div className="lf-s2-inner">
-          <div className="lf-big-text">
-            <AnimatePresence>
-              {showReally && (
-                <motion.h2
-                  className="lf-really"
-                  variants={reduced ? undefined : overshoot}
-                  initial="hidden" animate="show"
-                >
-                  really<br />bruh?
-                </motion.h2>
-              )}
-            </AnimatePresence>
+      {/* ════ SECTION 2 — WHAT YOU GET ════ */}
+      <section className="lf-scene lf-what" id="what-you-get">
+        <div className="lf-section-inner">
 
-            <AnimatePresence>
-              {showActually && (
-                <motion.p
-                  className="lf-like-actually lf-dm"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.2, 1, 0.4, 1] } }}
-                >
-                  like actually?
-                </motion.p>
-              )}
-            </AnimatePresence>
+          <InView className="lf-section-header">
+            <h2 className="lf-section-heading">This is what you get.</h2>
+            <p className="lf-section-sub lf-dm">
+              Not notes dumped into a PDF. A study system built around how the paper is actually asked.
+            </p>
+          </InView>
 
-            <AnimatePresence>
-              {showYesMf && (
-                <motion.div
-                  className="lf-s2-actions"
-                  variants={reduced ? undefined : ctaBounce}
-                  initial="hidden" animate="show"
-                >
-                  {/* burst doodle behind YES MF */}
-                  <div className="lf-yes-wrap">
-                    <YesBurst />
-                    <motion.button
-                      className="lf-btn-big"
-                      onClick={goToScene3}
-                      whileHover={reduced ? undefined : { rotate: 1, scale: 1.04 }}
-                      whileTap={reduced ? undefined : { scale: 0.91 }}
-                    >
-                      YES MF
-                    </motion.button>
+          <div className="lf-features-grid">
+            {[
+              { n: "01", title: "PREVIOUS PAPER ANALYSIS",  body: "We go through years of question papers and group repeated questions by topic.", meta: "2011–2025 analysed", deg: -1.5, delay: 0 },
+              { n: "02", title: "HIGH-YIELD PRIORITY",       body: "Topics ranked by repetition, recent appearances and the marks they're usually asked for.", meta: "MUST · HIGH · MEDIUM", deg: 1, delay: 0.07 },
+              { n: "03", title: "MARK-SCORING ANSWERS",      body: "Answers structured around the marks actually asked.", meta: "1 mark · 4 marks · 7–9 marks", deg: -0.8, delay: 0.14 },
+              { n: "04", title: "RAPID REVISION",            body: "Definitions, fill-in-the-blanks, true/false traps and rapid drills.", meta: "195 drills", deg: 1.5, delay: 0.21 },
+              { n: "05", title: "MOCK PAPERS",               body: "Predicted papers built from recurring examiner patterns.", meta: "3 full mocks", deg: -1, delay: 0.28 },
+            ].map((f) => (
+              <FeatureCard key={f.n} {...f} />
+            ))}
+          </div>
+
+          {/* GIF 2 — shocked cat */}
+          <div className="lf-what-gif-row">
+            <InView>
+              <div className="lf-meme-frame lf-meme-frame-tight">
+                <img
+                  src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGw2Z2R4aW02ZnF4ZmJpeGRzdnZsOXRhZGUwcHBtZWJlZDgwdDY0bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/oFvXciCA8px11faKJS/giphy.gif"
+                  alt="shocked reaction"
+                  width={260} height={240}
+                  loading="lazy"
+                />
+              </div>
+            </InView>
+            <motion.span
+              className="lf-annotation lf-ann-what"
+              variants={reduced ? undefined : noteIn}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-40px" }}
+            >
+              yeah. we actually read the papers.
+            </motion.span>
+          </div>
+        </div>
+      </section>
+
+      {/* ════ SECTION 3 — REAL PRODUCT PREVIEW ════ */}
+      <section className="lf-scene lf-product" id="product">
+        <div className="lf-section-inner">
+
+          <InView className="lf-section-header">
+            <h2 className="lf-section-heading">Not another PDF.</h2>
+            <p className="lf-section-sub lf-dm">A system built around the paper.</p>
+          </InView>
+
+          <div className="lf-previews-grid">
+
+            {/* Preview 1 — Priority score */}
+            <InView variants={frag(-1.5, 0)} className="lf-preview-wrap">
+              <div className="lf-preview-card lf-preview-priority">
+                <span className="lf-preview-label lf-dm">PRIORITY SCORE</span>
+                <div className="lf-priority-score">96<span className="lf-priority-pct">%</span></div>
+                <p className="lf-preview-title">Community Health Nursing</p>
+                <div className="lf-preview-meta-row lf-dm">
+                  <span className="lf-meta-chip lf-meta-chip-red">MUST</span>
+                  <span className="lf-preview-meta-text">Asked in 12 supplied papers</span>
+                </div>
+                <p className="lf-preview-expected lf-dm">Expected: 7–9 marks</p>
+              </div>
+            </InView>
+
+            {/* Preview 2 — Answer structure */}
+            <InView variants={frag(1, 0.08)} className="lf-preview-wrap">
+              <div className="lf-preview-card lf-preview-answer">
+                <span className="lf-preview-label lf-dm">INSIDE EVERY TOPIC</span>
+                {[
+                  { icon: "◈", text: "WHY EXAMINERS ASK THIS" },
+                  { icon: "✎", text: "WHAT YOU MUST WRITE" },
+                  { icon: "⚠", text: "COMMON MARK KILLERS" },
+                  { icon: "⚡", text: "2-MINUTE REVISION" },
+                  { icon: "✓", text: "FULL EXAM ANSWER" },
+                ].map((r) => (
+                  <div className="lf-answer-row lf-dm" key={r.text}>
+                    <span className="lf-answer-icon">{r.icon}</span>
+                    <span className="lf-answer-text">{r.text}</span>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                ))}
+              </div>
+            </InView>
 
-            <AnimatePresence>
-              {showS2Note && (
-                <motion.span
-                  className="lf-annotation lf-ann-s2"
-                  variants={reduced ? undefined : noteIn}
-                  initial="hidden" animate="show"
-                >
-                  bro said yes 💀
-                </motion.span>
-              )}
-            </AnimatePresence>
+            {/* Preview 3 — Mock paper */}
+            <InView variants={frag(-0.8, 0.16)} className="lf-preview-wrap">
+              <div className="lf-preview-card lf-preview-mock">
+                <span className="lf-preview-label lf-dm">INCLUDED</span>
+                <p className="lf-mock-title">MOCK PAPER 01</p>
+                <p className="lf-mock-marks lf-dm">75 MARKS</p>
+                <div className="lf-mock-parts lf-dm">
+                  <span className="lf-mock-part">QUESTIONS</span>
+                  <span className="lf-mock-divider">+</span>
+                  <span className="lf-mock-part">MODEL ANSWERS</span>
+                </div>
+                <p className="lf-mock-count lf-dm">3 predicted papers total</p>
+              </div>
+            </InView>
+
           </div>
 
-          <div className="lf-meme-right">
-            <div className="lf-meme-frame lf-meme-frame-tight">
-              <img
-                src="/media/study-culture/scene2-suspicious.gif"
-                alt="suspicious reaction"
-                width={300} height={280}
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* scene 2→3 connector */}
-        <div className="lf-connector lf-connector-center" aria-hidden="true">
-          <span className="lf-annotation">. . .</span>
-          <span className="lf-annotation lf-connector-anyway">anyway</span>
-        </div>
-      </section>
-
-      {/* ════════════════ SCENE 3 ════════════════ */}
-      <section
-        ref={s3Ref}
-        className={`lf-scene lf-s3${scene < 3 ? " lf-scene-hidden" : ""}`}
-        aria-hidden={scene < 3}
-      >
-        <div className="lf-s3-inner">
-          <div className="lf-meme-frame lf-meme-frame-center">
-            <img
-              src="/media/study-culture/scene3-celebration.gif"
-              alt="celebration welcome"
-              className="lf-s3-meme"
-              width={220} height={220}
-              loading="lazy"
-            />
-          </div>
-
-          <motion.h2
-            className="lf-yo"
-            variants={reduced ? undefined : overshoot}
-            initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-          >
-            yo.
-          </motion.h2>
-
-          <motion.p
-            className="lf-right-place"
-            variants={reduced ? undefined : stamp}
-            initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-            transition={{ delay: 0.18 }}
-          >
-            right place, biatch.
-            {/* underline doodle */}
-            <svg className="lf-underline-doodle" viewBox="0 0 240 10" aria-hidden="true">
-              <path d="M 2 5 C 30 2, 60 8, 100 4 C 140 1, 180 7, 238 5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round"/>
-            </svg>
-          </motion.p>
-
-          <motion.p
-            className="lf-body-copy lf-dm"
-            variants={reduced ? undefined : fadeUp}
-            initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-            transition={{ delay: 0.35 }}
-          >
-            we took{" "}
-            <span className="lf-highlight-word">old question papers</span>
-            , found what these exam people keep asking,
-            and turned the useful shit into study packs.
-          </motion.p>
-
-          {/* fragments — thrown notes */}
-          <div className="lf-fragments">
-            <motion.div
-              className="lf-fragment-wrap"
-              variants={reduced ? undefined : frag(-2, 0.1)}
-              initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
+          {/* GIF 3 — you came to the right place */}
+          <div className="lf-product-gif-row">
+            <InView>
+              <div className="lf-meme-frame lf-meme-frame-center">
+                <img
+                  src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXJibGhjcmduNGp0YjVndXUzZmh0c2NrbjYybm9uaTl3M3hrb2p1biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oxHQG9Ks6OtIIMX8A/giphy.gif"
+                  alt="You came to the right place"
+                  width={280} height={210}
+                  loading="lazy"
+                />
+              </div>
+            </InView>
+            <motion.span
+              className="lf-annotation lf-ann-product"
+              variants={reduced ? undefined : noteIn}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-40px" }}
             >
-              <span className="lf-fragment lf-fragment-green">24 high-yield topics</span>
-            </motion.div>
-
-            <motion.div
-              className="lf-fragment-wrap lf-fragment-mid"
-              variants={reduced ? undefined : frag(1.5, 0.22)}
-              initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-            >
-              <span className="lf-fragment lf-fragment-blue">195 rapid drills</span>
-              <span className="lf-annotation lf-ann-drills">sorry</span>
-            </motion.div>
-
-            <motion.div
-              className="lf-fragment-wrap"
-              variants={reduced ? undefined : frag(-1, 0.34)}
-              initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-            >
-              <span className="lf-fragment lf-fragment-orange">3 mocks to humble you</span>
-              <span className="lf-annotation lf-ann-mocks">character development</span>
-            </motion.div>
+              yeah. pretty much. 😭
+            </motion.span>
           </div>
-
-          <motion.button
-            className="lf-btn-yes lf-btn-s3"
-            onClick={goToScene4}
-            variants={reduced ? undefined : fadeUp}
-            initial="hidden" animate={scene >= 3 ? "show" : "hidden"}
-            transition={{ delay: 0.55 }}
-            whileHover={reduced ? undefined : { rotate: -1, scale: 1.03 }}
-            whileTap={reduced ? undefined : { scale: 0.93 }}
-          >
-            okay i&apos;m in →
-          </motion.button>
         </div>
       </section>
 
-      {/* ════════════════ SCENE 4 ════════════════ */}
-      <section
-        ref={s4Ref}
-        className={`lf-scene lf-s4${scene < 4 ? " lf-scene-hidden" : ""}`}
-        aria-hidden={scene < 4}
-      >
-        <div className="lf-s4-inner">
-          <div className="lf-s4-left">
-            <div className="lf-meme-frame lf-meme-frame-asym">
-              <img
-                src="/media/study-culture/scene4-come-here.gif"
-                alt="beckoning come here gesture"
-                width={260} height={260}
-                loading="lazy"
-              />
+      {/* ════ SECTION 4 — COMPARISON ════ */}
+      <section className="lf-scene lf-compare" id="compare">
+        <div className="lf-section-inner">
+
+          <InView className="lf-section-header">
+            <h2 className="lf-section-heading">You could keep doing this.</h2>
+          </InView>
+
+          <div className="lf-compare-grid">
+
+            {/* Old way */}
+            <InView variants={frag(-1.5, 0)} className="lf-compare-side lf-compare-old">
+              <div className="lf-compare-card lf-compare-card-messy">
+                <p className="lf-compare-label lf-dm">THE OLD WAY</p>
+                {[
+                  "700-page textbook",
+                  "random YouTube lectures",
+                  "WhatsApp PDFs",
+                  '"important questions 100% sure bro"',
+                  "trying to read everything",
+                ].map((item) => (
+                  <div className="lf-compare-item lf-compare-item-old lf-dm" key={item}>
+                    <span className="lf-compare-x">✕</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </InView>
+
+            {/* Divider + annotation */}
+            <div className="lf-compare-or">
+              <InView>
+                <p className="lf-or-text">or</p>
+                <svg className="lf-or-arrow" viewBox="0 0 60 80" aria-hidden="true">
+                  <path d="M 10 10 C 8 28, 40 28, 38 50 C 36 64, 24 68, 22 74" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                  <path d="M 14 70 L 22 74 L 20 64" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </InView>
             </div>
+
+            {/* New way */}
+            <InView variants={frag(1, 0.1)} className="lf-compare-side lf-compare-new">
+              <div className="lf-compare-card lf-compare-card-clean">
+                <p className="lf-compare-label lf-dm">STUDY AROUND THE PAPER</p>
+                {[
+                  "past-paper evidence",
+                  "topic priority",
+                  "marks-specific answers",
+                  "rapid revision",
+                  "predicted mock papers",
+                ].map((item) => (
+                  <div className="lf-compare-item lf-compare-item-new lf-dm" key={item}>
+                    <span className="lf-compare-check">✓</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </InView>
+
+          </div>
+
+          <InView>
+            <span className="lf-annotation lf-ann-compare">one of these sounds less painful</span>
+          </InView>
+
+        </div>
+      </section>
+
+      {/* ════ SECTION 5 — CTA ════ */}
+      <section className="lf-scene lf-cta-section" id="packs">
+        <div className="lf-cta-inner">
+
+          {/* GIF 4 — come here */}
+          <div className="lf-cta-gif-col">
+            <InView>
+              <div className="lf-meme-frame lf-meme-frame-asym">
+                <img
+                  src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHhwMTNiNGFpZWtoemJ3bDM3bXB4NjZ1czc2cmd2dW03ZGs0amZ3dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/t6Q2oJ8BWcvyE/giphy.gif"
+                  alt="beckoning come here gesture"
+                  width={260} height={260}
+                  loading="lazy"
+                />
+              </div>
+            </InView>
+
             <motion.h2
               className="lf-come-here"
-              variants={reduced ? undefined : { hidden: { letterSpacing: "0.12em", opacity: 0 }, show: { letterSpacing: "-0.04em", opacity: 1, transition: { duration: 0.6, ease: [0.2, 1, 0.4, 1] } } }}
-              initial="hidden" animate={scene >= 4 ? "show" : "hidden"}
+              variants={reduced ? undefined : { hidden: { letterSpacing: "0.12em", opacity: 0 }, show: { letterSpacing: "-0.04em", opacity: 1, transition: { duration: 0.55, ease: [0.2, 1, 0.4, 1] } } }}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-60px" }}
             >
-              come<br />here.
+              Come<br />here.
             </motion.h2>
           </div>
 
-          {/* The unnecessarily long arrow */}
+          {/* Arrow */}
           <div className="lf-s4-arrow-zone" aria-hidden="true">
-            <EpicArrow phase={arrowPhase} />
+            <CtaArrow />
           </div>
 
-          {/* CTA card */}
-          <motion.div
-            className="lf-cta-card"
-            variants={reduced ? undefined : ctaBounce}
-            initial="hidden"
-            animate={arrowPhase >= 2 ? "show" : "hidden"}
-          >
-            <p className="lf-boring-money lf-dm">okay here&apos;s the boring money part</p>
-            {/* capitalism jumpscare annotation */}
-            <span className="lf-annotation lf-ann-capitalism">capitalism jumpscare</span>
-            <motion.div
-              whileHover={reduced ? undefined : { scale: 1.03, rotate: -0.5 }}
-              whileTap={reduced ? undefined : { scale: 0.96 }}
-            >
-              <Link href="/access" className="lf-cta-btn">
-                GET ACCESS →
-              </Link>
-            </motion.div>
-            <p className="lf-cta-tagline lf-dm">
-              you pay. we give access. you study.<br />
-              hopefully you pass. beautiful system. 😭
-            </p>
-          </motion.div>
+          {/* Pack card */}
+          <InView variants={ctaBounce} className="lf-pack-card-wrap">
+            <div className="lf-pack-card">
+              <div className="lf-pack-card-top lf-dm">
+                <span className="lf-pack-course">GNM · 1st Year · Q.P. 9114</span>
+              </div>
+              <h3 className="lf-pack-title">Community Health Nursing I</h3>
+
+              <ul className="lf-pack-features lf-dm">
+                {[
+                  "Previous-paper analysis",
+                  "24 high-yield topics",
+                  "Mark-scoring answers",
+                  "195 rapid drills",
+                  "3 full mock papers",
+                  "Private device-bound access",
+                ].map((f) => (
+                  <li key={f} className="lf-pack-feature">
+                    <span className="lf-pack-check">✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="lf-pack-pricing">
+                <span className="lf-pack-price">₹299</span>
+                <span className="lf-annotation lf-ann-price">less than the food you order while &quot;studying&quot;</span>
+              </div>
+
+              <motion.div
+                whileHover={reduced ? undefined : { scale: 1.03, rotate: -0.5 }}
+                whileTap={reduced ? undefined : { scale: 0.96 }}
+              >
+                <Link href="/access" className="lf-btn-get-access">
+                  GET ACCESS →
+                </Link>
+              </motion.div>
+
+              <p className="lf-pack-tagline lf-dm">Pay once. Get access to this study pack.</p>
+            </div>
+          </InView>
         </div>
       </section>
 
@@ -458,116 +448,76 @@ export default function HomePage() {
   );
 }
 
-/* ─── YES burst SVG doodle ─────────────────────────────────── */
-function YesBurst() {
+/* ─── Feature card ──────────────────────────────────────────── */
+function FeatureCard({
+  n, title, body, meta, deg, delay,
+}: {
+  n: string; title: string; body: string; meta: string; deg: number; delay: number;
+}) {
+  const reduced = useReducedMotion();
   return (
-    <svg className="lf-yes-burst" viewBox="0 0 120 120" aria-hidden="true">
-      {/* 8 hand-drawn burst lines radiating out */}
-      <path d="M 60 60 L 60 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M 60 60 L 60 108" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M 60 60 L 12 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M 60 60 L 108 60" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M 60 60 L 26 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M 60 60 L 94 26" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M 60 60 L 94 94" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M 60 60 L 26 94" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-    </svg>
+    <motion.div
+      className="lf-feature-card"
+      variants={reduced ? undefined : frag(deg, delay)}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-40px" }}
+    >
+      <span className="lf-feature-num lf-dm">{n}</span>
+      <h3 className="lf-feature-title">{title}</h3>
+      <p className="lf-feature-body lf-dm">{body}</p>
+      <span className="lf-feature-meta lf-dm">{meta}</span>
+    </motion.div>
   );
 }
 
-/* ─── The epic unnecessarily long arrow ─────────────────────── */
-function EpicArrow({ phase }: { phase: number }) {
+/* ─── CTA arrow (always visible, no phase gating) ──────────── */
+function CtaArrow() {
   const isDesktop = useMediaQuery("(min-width: 860px)");
   const reduced = useReducedMotion();
-
-  // path lengths (approximate, measured after authoring)
-  const DESKTOP_LEN = 820;
-  const MOBILE_LEN  = 380;
-
-  const drawing = phase >= 1;
-  const done    = phase >= 2;
-  const instant = reduced;
 
   if (isDesktop) {
     return (
       <svg
         className="lf-epic-arrow lf-epic-arrow-desktop"
         viewBox="0 0 700 220"
-        xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        {/* ghost stroke for pen-drawn texture */}
         <path
           className="lf-arrow-ghost"
           d="M 30 30 C 80 10, 140 80, 200 65 C 260 50, 290 120, 360 100 C 420 84, 440 140, 380 175 C 330 205, 440 210, 520 190 C 580 175, 620 155, 660 170 C 680 178, 688 190, 686 200"
-          strokeDasharray={DESKTOP_LEN}
-          strokeDashoffset={instant || drawing ? 0 : DESKTOP_LEN}
-          style={instant ? {} : { transition: drawing ? `stroke-dashoffset 2s cubic-bezier(0.32,0,0.2,1)` : "none" }}
         />
-        {/* main path */}
         <path
           className="lf-arrow-main"
           d="M 30 30 C 80 10, 140 80, 200 65 C 260 50, 290 120, 360 100 C 420 84, 440 140, 380 175 C 330 205, 440 210, 520 190 C 580 175, 620 155, 660 170 C 680 178, 688 190, 686 200"
-          strokeDasharray={DESKTOP_LEN}
-          strokeDashoffset={instant || drawing ? 0 : DESKTOP_LEN}
-          style={instant ? {} : { transition: drawing ? `stroke-dashoffset 2s cubic-bezier(0.32,0,0.2,1)` : "none" }}
         />
-        {/* arrowhead — two hand-drawn strokes */}
         <path
           className="lf-arrowhead-stroke"
           d="M 672 188 L 686 200 L 674 210"
-          strokeDasharray={40}
-          strokeDashoffset={instant || done ? 0 : 40}
-          style={instant ? {} : { transition: done ? "stroke-dashoffset 300ms ease 0.1s" : "none" }}
         />
-        {/* midpoint annotation */}
-        <text
-          className="lf-arrow-note"
-          x="355" y="92"
-          style={{ opacity: instant || done ? 1 : 0, transition: done ? "opacity 300ms ease 0.2s" : "none" }}
-        >
-          this way genius
+        <text className="lf-arrow-note" x="355" y="92">
+          yeah, this bit
         </text>
       </svg>
     );
   }
 
-  // mobile — vertical drop arrow
   return (
     <svg
       className="lf-epic-arrow lf-epic-arrow-mobile"
       viewBox="0 0 120 200"
-      xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
       <path
         className="lf-arrow-ghost"
         d="M 60 10 C 80 30, 30 50, 55 80 C 75 105, 35 130, 60 160 C 75 178, 70 188, 62 196"
-        strokeDasharray={MOBILE_LEN}
-        strokeDashoffset={instant || drawing ? 0 : MOBILE_LEN}
-        style={instant ? {} : { transition: drawing ? `stroke-dashoffset 1.4s cubic-bezier(0.32,0,0.2,1)` : "none" }}
       />
       <path
         className="lf-arrow-main"
         d="M 60 10 C 80 30, 30 50, 55 80 C 75 105, 35 130, 60 160 C 75 178, 70 188, 62 196"
-        strokeDasharray={MOBILE_LEN}
-        strokeDashoffset={instant || drawing ? 0 : MOBILE_LEN}
-        style={instant ? {} : { transition: drawing ? `stroke-dashoffset 1.4s cubic-bezier(0.32,0,0.2,1)` : "none" }}
       />
-      <path
-        className="lf-arrowhead-stroke"
-        d="M 50 190 L 62 196 L 56 206"
-        strokeDasharray={30}
-        strokeDashoffset={instant || done ? 0 : 30}
-        style={instant ? {} : { transition: done ? "stroke-dashoffset 300ms ease 0.1s" : "none" }}
-      />
-      <text
-        className="lf-arrow-note"
-        x="72" y="108"
-        style={{ opacity: instant || done ? 1 : 0, transition: done ? "opacity 300ms ease 0.15s" : "none" }}
-      >
-        this way genius
-      </text>
+      <path className="lf-arrowhead-stroke" d="M 50 190 L 62 196 L 56 206" />
+      <text className="lf-arrow-note" x="72" y="108">this way genius</text>
     </svg>
   );
 }

@@ -1,9 +1,9 @@
 /* ============================================================
-   LANDING FUNNEL — meme-scroll · unhinged motion design
+   LANDING FUNNEL — serious product · unserious personality
    Typography voices:
-     --font-anton   → BIG MEME headlines
-     --font-dm      → readable body/UI copy
-     --font-caveat  → handwritten annotations / doodles
+     --font-anton   → display headlines
+     --font-dm      → body / UI copy
+     --font-caveat  → handwritten annotations
    ============================================================ */
 
 /* ── Font shorthand classes ── */
@@ -15,10 +15,12 @@
   --lf-bg:           #f7f5f0;
   --lf-bg2:          #f0eef9;
   --lf-bg3:          #eef8f2;
+  --lf-bg4:          #fdf8f2;
   --lf-text:         #1a1a1a;
   --lf-muted:        #6b6b6b;
   --lf-accent:       #4f46e5;
   --lf-warm:         #e55c4f;
+  --lf-green:        #16a34a;
   --lf-border:       #e2ddd5;
   --lf-surface:      #ffffff;
   --lf-ink:          #2a2118;
@@ -31,12 +33,29 @@
   overflow-x: hidden;
 }
 
-/* ── Sticky login pill ── */
-.lf-already-paid {
+/* ═══════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════ */
+.lf-nav {
   position: fixed;
-  top: 14px;
-  right: 16px;
+  top: 0; left: 0; right: 0;
   z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px clamp(16px, 5vw, 48px);
+  pointer-events: none;
+}
+.lf-nav-brand {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--lf-text);
+  pointer-events: auto;
+}
+.lf-already-paid {
+  pointer-events: auto;
   font-family: var(--font-dm), sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -52,22 +71,49 @@
 }
 .lf-already-paid:hover { color: var(--lf-text); border-color: #c0b8ad; }
 
-/* ── Scene shared ── */
+/* ═══════════════════════════════════════════
+   SHARED SCENE PRIMITIVES
+   ═══════════════════════════════════════════ */
 .lf-scene {
-  min-height: 90svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(52px, 9vw, 88px) clamp(20px, 6vw, 72px);
+  padding: clamp(52px, 9vw, 96px) clamp(20px, 6vw, 72px);
   position: relative;
 }
-.lf-scene-hidden { display: none; }
+.lf-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.lf-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lf-section-heading {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+}
+.lf-section-sub {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 500;
+  color: var(--lf-muted);
+  line-height: 1.65;
+  max-width: 600px;
+  margin: 0;
+}
 
-/* ═══════════════════════════════════════════
-   ANNOTATION / DOODLE SYSTEM
-   font-caveat, hand-drawn SVGs
-   ═══════════════════════════════════════════ */
-
+/* ─── ANNOTATION / DOODLE SYSTEM ─── */
 .lf-annotation {
   font-family: var(--font-caveat), "Caveat", cursive;
   font-size: clamp(14px, 2.5vw, 18px);
@@ -78,133 +124,52 @@
   user-select: none;
 }
 
-/* ── Scene 1 annotation ── */
-.lf-ann-s1 {
-  position: absolute;
-  bottom: -24px;
-  left: 12px;
-  transform: rotate(-3deg);
-  white-space: nowrap;
-  font-size: 15px;
-}
-
-.lf-ann-arrow-s1 {
-  position: absolute;
-  bottom: -52px;
-  left: 90px;
-  width: 52px;
-  height: 38px;
-  color: var(--lf-caveat-color);
-  opacity: 0.7;
-}
-
-/* ── Scene 2 annotation ── */
-.lf-ann-s2 {
-  margin-top: 14px;
-  display: inline-block;
-  transform: rotate(-2deg);
-  font-size: 17px;
-  opacity: 0.85;
-}
-
-/* ── Scene 3 annotations ── */
-.lf-ann-drills {
-  display: block;
-  font-size: 13px;
-  text-align: center;
-  margin-top: 4px;
-  transform: rotate(2deg);
-  opacity: 0.8;
-}
-
-.lf-ann-mocks {
-  display: block;
-  font-size: 13px;
-  text-align: center;
-  margin-top: 4px;
-  transform: rotate(-1.5deg);
-  opacity: 0.8;
-}
-
-/* ── Scene 4 annotation ── */
-.lf-ann-capitalism {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-  transform: rotate(-2deg);
-  opacity: 0.75;
-}
-
-/* ── Connectors between scenes ── */
-.lf-connector {
-  position: absolute;
-  bottom: -48px;
-  left: clamp(20px, 6vw, 72px);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  z-index: 10;
-}
-
-.lf-connector-center {
-  left: 50%;
-  transform: translateX(-50%);
-  align-items: center;
-}
-
-.lf-connector-squiggle {
-  width: 24px;
-  height: 52px;
-  color: var(--lf-muted);
-  opacity: 0.45;
-}
-
-.lf-connector-note {
-  font-size: 13px;
-  opacity: 0.7;
-  transform: rotate(-1deg);
-}
-
-.lf-connector-anyway {
-  font-size: 15px;
-  opacity: 0.7;
-  margin-top: 4px;
-}
-
-/* ── Underline doodle (scene 3) ── */
-.lf-right-place {
+/* ─── GIF / meme frames ─── */
+.lf-meme-frame {
   position: relative;
+  border-radius: 22px;
+  overflow: hidden;
   display: inline-block;
 }
-
-.lf-underline-doodle {
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 100%;
-  height: 10px;
-  color: var(--lf-warm);
-  overflow: visible;
-  pointer-events: none;
+.lf-meme-frame img { display: block; width: 100%; height: auto; }
+.lf-meme-frame-tilt {
+  transform: rotate(-2.5deg);
+  box-shadow: 0 6px 32px rgba(30,20,10,0.14),
+              0 0 0 3px rgba(255,255,255,0.9),
+              0 0 0 4px rgba(180,165,148,0.3);
+  width: clamp(200px, 44vw, 320px);
+  transition: transform 300ms ease;
 }
-
-/* ── Highlight word (scene 3) ── */
-.lf-highlight-word {
-  position: relative;
-  display: inline;
-  background: linear-gradient(90deg, #fef08a 0%, #fde047 100%);
-  border-radius: 3px;
-  padding: 0 3px;
+.lf-meme-frame-tilt:hover { transform: rotate(-1deg) scale(1.015); }
+.lf-meme-frame-tight {
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,20,10,0.12);
+  width: clamp(180px, 40vw, 270px);
+  transition: transform 300ms ease;
 }
+.lf-meme-frame-tight:hover { transform: rotate(0.5deg) scale(1.01); }
+.lf-meme-frame-center {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(30,20,10,0.10);
+  width: clamp(160px, 38vw, 280px);
+}
+.lf-meme-frame-asym {
+  border-radius: 24px 12px 24px 12px;
+  box-shadow: 0 8px 36px rgba(30,20,10,0.14);
+  width: clamp(180px, 38vw, 260px);
+  transition: transform 300ms ease;
+}
+.lf-meme-frame-asym:hover { transform: rotate(-0.6deg) scale(1.01); }
 
 /* ═══════════════════════════════════════════
-   SCENE 1 — bruh. do you wanna pass?
+   HERO — Section 1
    ═══════════════════════════════════════════ */
-
-.lf-s1 { background: var(--lf-bg); }
-
-.lf-s1-inner {
+.lf-hero {
+  background: var(--lf-bg);
+  min-height: 92svh;
+  padding-top: clamp(80px, 14vw, 120px);
+}
+.lf-hero-inner {
   display: grid;
   gap: 40px;
   align-items: center;
@@ -213,383 +178,447 @@
   width: 100%;
 }
 @media (min-width: 760px) {
-  .lf-s1-inner { grid-template-columns: 1fr 1.15fr; gap: 64px; }
+  .lf-hero-inner { grid-template-columns: 1.2fr 1fr; gap: 64px; }
 }
-
-/* GIF frames */
-.lf-s1-media-col { position: relative; display: flex; justify-content: center; }
-
-.lf-meme-frame {
-  position: relative;
-  border-radius: 22px;
-  overflow: hidden;
-  display: inline-block;
-}
-.lf-meme-frame img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* scene 1 — slightly rotated with paper-like border */
-.lf-meme-frame-tilt {
-  transform: rotate(-2.5deg);
-  box-shadow: 0 6px 32px rgba(30,20,10,0.14), 0 0 0 3px rgba(255,255,255,0.9), 0 0 0 4px rgba(180,165,148,0.3);
-  width: clamp(200px, 44vw, 320px);
-  transition: transform 300ms ease;
-}
-.lf-meme-frame-tilt:hover { transform: rotate(-1deg) scale(1.015); }
-
-/* scene 2 — tighter, reaction-image crop */
-.lf-meme-frame-tight {
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(30,20,10,0.12);
-  width: clamp(180px, 40vw, 300px);
-  transition: transform 300ms ease;
-}
-.lf-meme-frame-tight:hover { transform: rotate(0.5deg) scale(1.01); }
-
-/* scene 3 — centered, clean */
-.lf-meme-frame-center {
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(30,20,10,0.1);
-  width: clamp(150px, 38vw, 240px);
-}
-
-/* scene 4 — asymmetric */
-.lf-meme-frame-asym {
-  border-radius: 24px 12px 24px 12px;
-  box-shadow: 0 8px 36px rgba(30,20,10,0.14);
-  width: clamp(180px, 38vw, 280px);
-  transition: transform 300ms ease;
-}
-.lf-meme-frame-asym:hover { transform: rotate(-0.6deg) scale(1.01); }
-
-/* ── Copy column ── */
-.lf-s1-copy { display: flex; flex-direction: column; gap: 22px; }
-
-/* VOICE 1 — Anton */
-.lf-bruh {
+.lf-hero-copy { display: flex; flex-direction: column; gap: 24px; }
+.lf-hero-headline {
   font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(5rem, 15vw, 10rem);
+  font-size: clamp(3.4rem, 9.5vw, 7.2rem);
   font-weight: 400;
-  line-height: 0.88;
+  line-height: 0.92;
   letter-spacing: -0.02em;
   color: var(--lf-text);
   margin: 0;
   text-transform: uppercase;
 }
-
-.lf-question-wrap { display: flex; flex-direction: column; gap: 4px; }
-
-.lf-question-line {
-  font-family: var(--font-dm), "DM Sans", sans-serif;
-  font-size: clamp(1rem, 2.8vw, 1.5rem);
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--lf-text);
-  margin: 0;
-}
-
-.lf-pass-slam {
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  font-weight: 400;
-  color: var(--lf-warm);
-  letter-spacing: -0.02em;
-  line-height: 0.9;
-  display: inline-block;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.lf-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-
-/* ═══════════════════════════════════════════
-   BUTTONS
-   ═══════════════════════════════════════════ */
-
-.lf-btn-yes {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-dm), "DM Sans", sans-serif;
-  font-size: clamp(0.9rem, 2.2vw, 1rem);
-  font-weight: 700;
-  padding: 14px 28px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  background: var(--lf-text);
-  color: #fff;
-  box-shadow: 0 4px 22px rgba(0,0,0,0.2);
-  /* hover/tap handled by Framer */
-}
-.lf-btn-yes.lf-btn-flash { background: #333; }
-
-.lf-btn-s3 { margin-top: 8px; }
-
-.lf-btn-nah {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-dm), "DM Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--lf-muted);
-  background: transparent;
-  border: 1.5px solid var(--lf-border);
-  border-radius: 999px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-.lf-btn-nah.shook {
-  animation: lf-shake 440ms cubic-bezier(.36,.07,.19,.97);
-}
-@keyframes lf-shake {
-  0%,100% { transform: translateX(0) rotate(0deg); }
-  12%  { transform: translateX(-7px) rotate(-2deg); }
-  28%  { transform: translateX(7px) rotate(2deg); }
-  44%  { transform: translateX(-5px) rotate(-1.5deg); }
-  60%  { transform: translateX(5px) rotate(1.5deg); }
-  76%  { transform: translateX(-3px) rotate(-0.8deg); }
-  88%  { transform: translateX(3px) rotate(0.8deg); }
-}
-
-.lf-nah-response-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-.lf-nah-response {
-  font-size: 13px;
-  color: var(--lf-muted);
-  font-weight: 600;
-}
-.lf-nah-arrow {
-  width: 48px;
-  height: 22px;
-  color: var(--lf-caveat-color);
-  opacity: 0.65;
-  flex-shrink: 0;
-}
-
-/* YES MF button + burst */
-.lf-yes-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lf-yes-burst {
-  position: absolute;
-  width: 110px;
-  height: 110px;
-  color: var(--lf-warm);
-  opacity: 0.22;
-  pointer-events: none;
-}
-
-.lf-btn-big {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  padding: 18px 44px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  background: var(--lf-warm);
-  color: #fff;
-  box-shadow: 0 6px 30px rgba(229,92,79,0.4);
-  text-transform: uppercase;
-}
-
-.lf-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  padding: 18px 40px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  background: var(--lf-text);
-  color: #fff;
-  text-decoration: none;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.22);
-  display: block;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-/* ═══════════════════════════════════════════
-   SCENE 2 — really bruh?
-   ═══════════════════════════════════════════ */
-
-.lf-s2 { background: var(--lf-bg2); }
-
-.lf-s2-inner {
-  display: grid;
-  gap: 32px;
-  align-items: center;
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
-}
-@media (min-width: 760px) {
-  .lf-s2-inner { grid-template-columns: 1.15fr 1fr; gap: 64px; }
-}
-
-.lf-big-text { display: flex; flex-direction: column; gap: 14px; }
-
-.lf-really {
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(4rem, 13vw, 9rem);
-  font-weight: 400;
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-  color: var(--lf-text);
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.lf-like-actually {
-  font-size: clamp(1rem, 2.8vw, 1.6rem);
-  font-weight: 600;
-  color: var(--lf-muted);
-  margin: 0;
-}
-
-.lf-s2-actions { margin-top: 10px; }
-
-.lf-meme-right { display: flex; align-items: center; justify-content: center; }
-
-/* ═══════════════════════════════════════════
-   SCENE 3 — yo. right place biatch.
-   ═══════════════════════════════════════════ */
-
-.lf-s3 { background: var(--lf-bg3); }
-
-.lf-s3-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 20px;
-  max-width: 820px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.lf-s3-meme {
-  width: clamp(150px, 38vw, 240px);
-  height: auto;
-  display: block;
-}
-
-.lf-yo {
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(5rem, 16vw, 11rem);
-  font-weight: 400;
-  line-height: 0.85;
-  letter-spacing: -0.02em;
-  color: var(--lf-text);
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.lf-right-place {
-  font-family: var(--font-anton), "Anton", Impact, sans-serif;
-  font-size: clamp(1.3rem, 4vw, 2.4rem);
-  font-weight: 400;
-  color: var(--lf-text);
-  letter-spacing: 0.01em;
-  margin: 0;
-  text-transform: uppercase;
-  position: relative;
-  display: inline-block;
-}
-
-.lf-body-copy {
-  font-size: clamp(0.95rem, 2vw, 1.05rem);
+.lf-headline-em { color: var(--lf-warm); }
+.lf-hero-br { display: none; }
+@media (min-width: 500px) { .lf-hero-br { display: block; } }
+.lf-hero-sub {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
   font-weight: 500;
   color: var(--lf-muted);
   line-height: 1.65;
   max-width: 520px;
   margin: 0;
 }
-
-/* fragments — thrown-notes */
-.lf-fragments {
+.lf-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 4px;
+  gap: 12px;
+  align-items: center;
 }
 
-.lf-fragment-wrap {
+/* Buttons */
+.lf-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  padding: 15px 30px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--lf-text);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.2);
+  text-transform: uppercase;
+  transition: background 150ms;
+}
+.lf-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: 1.5px solid var(--lf-border);
+  background: transparent;
+  color: var(--lf-muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+.lf-btn-ghost:hover { color: var(--lf-text); border-color: #c0b8ad; }
+
+/* Hero GIF column */
+.lf-hero-media {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.lf-ann-hero {
+  position: absolute;
+  bottom: -22px;
+  left: 10px;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+  font-size: 15px;
+}
+.lf-ann-arrow-hero {
+  position: absolute;
+  bottom: -50px;
+  left: 86px;
+  width: 52px;
+  height: 38px;
+  color: var(--lf-caveat-color);
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════
+   WHAT YOU GET — Section 2
+   ═══════════════════════════════════════════ */
+.lf-what { background: var(--lf-bg2); }
+
+/* Feature cards — study board fragments */
+.lf-features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 580px) {
+  .lf-features-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 900px) {
+  .lf-features-grid { grid-template-columns: repeat(3, 1fr); }
+  .lf-features-grid > :nth-child(4) { grid-column: 1 / 2; }
+  .lf-features-grid > :nth-child(5) { grid-column: 2 / 3; }
+}
+
+.lf-feature-card {
+  background: var(--lf-surface);
+  border: 1.5px solid var(--lf-border);
+  border-radius: 20px;
+  padding: 24px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 3px 16px rgba(30,20,10,0.07);
+  position: relative;
+}
+.lf-feature-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lf-muted);
+}
+.lf-feature-title {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.lf-feature-body {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--lf-muted);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+.lf-feature-meta {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lf-text);
+  background: rgba(26,26,26,0.05);
+  border-radius: 6px;
+  padding: 5px 10px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+/* GIF row under features */
+.lf-what-gif-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.lf-ann-what {
+  font-size: clamp(15px, 3vw, 22px);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════
+   REAL PRODUCT PREVIEW — Section 3
+   ═══════════════════════════════════════════ */
+.lf-product { background: var(--lf-bg3); }
+
+.lf-previews-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 640px) {
+  .lf-previews-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 960px) {
+  .lf-previews-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.lf-preview-wrap { display: flex; flex-direction: column; }
+
+.lf-preview-card {
+  background: var(--lf-surface);
+  border: 1.5px solid var(--lf-border);
+  border-radius: 22px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 20px rgba(30,20,10,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.lf-preview-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lf-muted);
+  display: block;
+}
+
+/* Preview 1 — Priority score */
+.lf-preview-priority { border-top: 3px solid var(--lf-warm); }
+.lf-priority-score {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 400;
+  color: var(--lf-warm);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.lf-priority-pct { font-size: 0.5em; vertical-align: super; }
+.lf-preview-title {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 400;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.lf-preview-meta-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lf-meta-chip {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.lf-meta-chip-red { background: #fee2e2; color: #b91c1c; }
+.lf-preview-meta-text { font-size: 12px; font-weight: 600; color: var(--lf-muted); }
+.lf-preview-expected { font-size: 12px; font-weight: 700; color: var(--lf-text); margin: 0; }
+
+/* Preview 2 — Answer structure */
+.lf-preview-answer { border-top: 3px solid var(--lf-accent); }
+.lf-answer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--lf-border);
+}
+.lf-answer-row:last-child { border-bottom: none; }
+.lf-answer-icon {
+  font-size: 14px;
+  color: var(--lf-accent);
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+.lf-answer-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--lf-text);
+}
+
+/* Preview 3 — Mock paper */
+.lf-preview-mock { border-top: 3px solid var(--lf-green); }
+.lf-mock-title {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 400;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.lf-mock-marks { font-size: 13px; font-weight: 700; color: var(--lf-green); margin: 0; }
+.lf-mock-parts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.lf-mock-part {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: 8px;
+  padding: 5px 12px;
+}
+.lf-mock-divider { font-size: 14px; font-weight: 700; color: var(--lf-muted); }
+.lf-mock-count { font-size: 12px; color: var(--lf-muted); margin: 4px 0 0; }
+
+/* GIF row */
+.lf-product-gif-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.lf-ann-product {
+  font-size: clamp(15px, 3vw, 22px);
+  transform: rotate(1.5deg);
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════
+   COMPARISON — Section 4
+   ═══════════════════════════════════════════ */
+.lf-compare { background: var(--lf-bg4); }
+
+.lf-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (min-width: 760px) {
+  .lf-compare-grid {
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 32px;
+  }
+}
+
+/* Side wrappers */
+.lf-compare-side { display: flex; flex-direction: column; }
+.lf-compare-old  { }
+.lf-compare-new  { }
+
+/* Old way card — slightly messy */
+.lf-compare-card {
+  border-radius: 22px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lf-compare-card-messy {
+  background: #fff8f0;
+  border: 1.5px solid #e8d8c8;
+  box-shadow: 0 3px 18px rgba(30,20,10,0.07);
+  transform: rotate(-0.8deg);
+}
+.lf-compare-card-clean {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  box-shadow: 0 4px 22px rgba(22,163,74,0.09);
+  transform: rotate(0.5deg);
+}
+.lf-compare-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--lf-muted);
+  margin: 0 0 4px;
+}
+.lf-compare-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--lf-text);
+}
+.lf-compare-item-old { opacity: 0.8; }
+.lf-compare-item-new { }
+.lf-compare-x { color: #ef4444; flex-shrink: 0; font-weight: 700; }
+.lf-compare-check { color: var(--lf-green); flex-shrink: 0; font-weight: 700; }
+
+/* Centre divider */
+.lf-compare-or {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* rotation set by framer per-fragment */
+  gap: 8px;
+}
+.lf-or-text {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--lf-caveat-color);
+  margin: 0;
+}
+.lf-or-arrow {
+  width: 36px;
+  height: 60px;
+  color: var(--lf-caveat-color);
+  opacity: 0.6;
 }
 
-.lf-fragment {
-  font-family: var(--font-dm), "DM Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 10px 20px;
-  border-radius: 12px;
-  letter-spacing: 0.01em;
-  box-shadow: 0 3px 12px rgba(30,20,10,0.08);
+/* Annotation below grid */
+.lf-ann-compare {
+  font-size: clamp(16px, 3vw, 22px);
+  transform: rotate(-1.5deg);
+  display: inline-block;
+  margin-top: 8px;
 }
-
-.lf-fragment-green  { background: #dcfce7; color: #15803d; border: 1.5px solid #bbf7d0; }
-.lf-fragment-blue   { background: #dbeafe; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
-.lf-fragment-orange { background: #ffedd5; color: #c2410c; border: 1.5px solid #fed7aa; }
 
 /* ═══════════════════════════════════════════
-   SCENE 4 — come here. + epic arrow + CTA
+   CTA / STUDY PACK — Section 5
    ═══════════════════════════════════════════ */
-
-.lf-s4 {
+.lf-cta-section {
   background: var(--lf-bg);
-  min-height: 100svh;
+  min-height: 80svh;
 }
 
-.lf-s4-inner {
+.lf-cta-inner {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 32px;
+  align-items: flex-start;
 }
-
 @media (min-width: 860px) {
-  .lf-s4-inner {
+  .lf-cta-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto;
     gap: 0 56px;
     align-items: start;
   }
-  .lf-s4-left    { grid-column: 1; grid-row: 1; }
-  .lf-s4-arrow-zone { grid-column: 1 / -1; grid-row: 2; }
-  .lf-cta-card   { grid-column: 2; grid-row: 1 / 3; align-self: center; padding-top: 20px; }
+  .lf-cta-gif-col    { grid-column: 1; grid-row: 1; }
+  .lf-s4-arrow-zone  { grid-column: 1 / -1; grid-row: 2; }
+  .lf-pack-card-wrap { grid-column: 2; grid-row: 1 / 3; align-self: center; }
 }
 
-.lf-s4-left {
+.lf-cta-gif-col {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -600,7 +629,6 @@
   font-family: var(--font-anton), "Anton", Impact, sans-serif;
   font-size: clamp(3.5rem, 11vw, 8rem);
   font-weight: 400;
-  /* letter-spacing animated by framer */
   line-height: 0.88;
   color: var(--lf-text);
   margin: 0;
@@ -609,27 +637,23 @@
 
 /* ── Epic arrow SVG ── */
 .lf-s4-arrow-zone { width: 100%; overflow: visible; }
-
 .lf-epic-arrow-desktop {
-  width: 100%;
-  height: 140px;
+  width: 100%; height: 140px;
   overflow: visible;
   display: none;
 }
 .lf-epic-arrow-mobile {
-  width: 100px;
-  height: 180px;
+  width: 100px; height: 180px;
   overflow: visible;
   display: block;
   margin: 0 auto;
 }
-
 @media (min-width: 860px) {
   .lf-epic-arrow-desktop { display: block; }
   .lf-epic-arrow-mobile  { display: none; }
 }
 
-/* ghost stroke — gives pen texture */
+/* ghost stroke — paper texture */
 .lf-arrow-ghost {
   fill: none;
   stroke: var(--lf-text);
@@ -638,8 +662,6 @@
   stroke-linejoin: round;
   opacity: 0.06;
 }
-
-/* main stroke */
 .lf-arrow-main {
   fill: none;
   stroke: var(--lf-text);
@@ -647,8 +669,6 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* arrowhead — two drawn strokes */
 .lf-arrowhead-stroke {
   fill: none;
   stroke: var(--lf-text);
@@ -656,8 +676,6 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* "this way genius" mid-arrow annotation */
 .lf-arrow-note {
   font-family: var(--font-caveat), "Caveat", cursive;
   font-size: 15px;
@@ -667,36 +685,111 @@
   transform-origin: center;
 }
 
-/* ── CTA card ── */
-.lf-cta-card {
+/* ── Study pack card ── */
+.lf-pack-card-wrap { width: 100%; max-width: 420px; }
+.lf-pack-card {
   background: var(--lf-surface);
   border: 2px solid var(--lf-border);
   border-radius: 28px;
   padding: clamp(24px, 5vw, 40px);
-  max-width: 420px;
   box-shadow: 0 8px 44px rgba(0,0,0,0.09);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   position: relative;
 }
-
-.lf-boring-money {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+.lf-pack-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lf-pack-course {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--lf-muted);
-  margin: 0 0 8px;
 }
-
-.lf-cta-tagline {
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
+.lf-pack-title {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 400;
+  color: var(--lf-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.lf-pack-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.lf-pack-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--lf-text);
+}
+.lf-pack-check { color: var(--lf-green); flex-shrink: 0; }
+.lf-pack-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1.5px solid var(--lf-border);
+}
+.lf-pack-price {
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(2.4rem, 6vw, 3rem);
+  font-weight: 400;
+  color: var(--lf-text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.lf-ann-price {
+  font-size: 13px;
+  transform: rotate(-1.5deg);
+  display: inline-block;
+  opacity: 0.8;
+}
+.lf-btn-get-access {
+  display: block;
+  text-align: center;
+  font-family: var(--font-anton), "Anton", Impact, sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 18px 28px;
+  border-radius: 999px;
+  background: var(--lf-text);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.22);
+  transition: transform 150ms, box-shadow 150ms;
+}
+.lf-btn-get-access:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 34px rgba(0,0,0,0.26);
+}
+.lf-pack-tagline {
+  font-size: 12.5px;
   color: var(--lf-muted);
-  line-height: 1.6;
-  margin: 18px 0 0;
+  text-align: center;
+  margin: 0;
 }
 
-/* ── Footer ── */
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
 .lf-footer {
-  padding: 24px clamp(20px,5vw,48px);
+  padding: 24px clamp(20px, 5vw, 48px);
   border-top: 1px solid var(--lf-border);
   display: flex;
   justify-content: space-between;
@@ -713,9 +806,8 @@
 .lf-footer-link:hover { color: var(--lf-text); }
 
 /* ═══════════════════════════════════════════
-   ACCESS PAGES (kept from previous pass)
+   ACCESS PAGES  (untouched flow)
    ═══════════════════════════════════════════ */
-
 .access-page {
   --sb-bg: #f6f4ef;
   --sb-surface: #ffffff;
@@ -726,7 +818,7 @@
   min-height: 100dvh;
   background: var(--sb-bg);
   color: var(--sb-text);
-  font-family: var(--font-jakarta), "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-family: var(--font-dm), "DM Sans", Inter, system-ui, sans-serif;
   position: relative;
 }
 .access-already-paid {
@@ -786,16 +878,11 @@
 .access-empty-sub { font-size: 13px; margin-top: 8px; }
 
 /* ═══════════════════════════════════════════
-   REDUCED MOTION OVERRIDES
+   REDUCED MOTION
    ═══════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-  .lf-btn-nah.shook  { animation: none; }
-  .lf-btn-yes,
-  .lf-btn-nah,
-  .lf-btn-big,
-  .lf-cta-btn        { transition: none; }
   .lf-arrow-main,
   .lf-arrow-ghost,
   .lf-arrowhead-stroke { transition: none !important; stroke-dashoffset: 0 !important; }
-  .lf-arrow-note     { opacity: 1 !important; }
+  .lf-arrow-note { opacity: 1 !important; }
 }

@@ -325,15 +325,9 @@ export default function HomePage() {
               </div>
             </InView>
 
-            {/* Divider + annotation */}
-            <div className="lf-compare-or">
-              <InView>
-                <p className="lf-or-text">or</p>
-                <svg className="lf-or-arrow" viewBox="0 0 60 80" aria-hidden="true">
-                  <path d="M 10 10 C 8 28, 40 28, 38 50 C 36 64, 24 68, 22 74" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-                  <path d="M 14 70 L 22 74 L 20 64" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </InView>
+            {/* Divider label — purely textual, arrow is overlay */}
+            <div className="lf-compare-or" aria-hidden="true">
+              <p className="lf-or-text">or</p>
             </div>
 
             {/* New way */}
@@ -355,6 +349,9 @@ export default function HomePage() {
               </div>
             </InView>
 
+            {/* Bridge arrow — spans full grid width as absolute overlay */}
+            <CompareArrow />
+
           </div>
 
           <InView>
@@ -366,6 +363,11 @@ export default function HomePage() {
 
       {/* ════ SECTION 5 — CTA ════ */}
       <section className="lf-scene lf-cta-section" id="packs">
+        {/* Arrow is position:absolute, spans the entire section */}
+        <div className="lf-s4-arrow-zone" aria-hidden="true">
+          <CtaArrow />
+        </div>
+
         <div className="lf-cta-inner">
 
           {/* GIF 4 — come here */}
@@ -390,11 +392,6 @@ export default function HomePage() {
             >
               Come<br />here.
             </motion.h2>
-          </div>
-
-          {/* Arrow */}
-          <div className="lf-s4-arrow-zone" aria-hidden="true">
-            <CtaArrow />
           </div>
 
           {/* Pack card */}
@@ -471,53 +468,147 @@ function FeatureCard({
   );
 }
 
-/* ─── CTA arrow (always visible, no phase gating) ──────────── */
-function CtaArrow() {
-  const isDesktop = useMediaQuery("(min-width: 860px)");
-  const reduced = useReducedMotion();
+/* ─── Comparison bridge arrow — overlays the full grid ──────── */
+function CompareArrow() {
+  const isDesktop = useMediaQuery("(min-width: 760px)");
 
   if (isDesktop) {
+    /*
+     * Position: absolute, spanning the full compare-grid width.
+     * Visually bridges old-way card (left) → new-way card (right).
+     * viewBox 0 0 800 120. Path: starts mid-left, curves right-downward.
+     */
     return (
       <svg
-        className="lf-epic-arrow lf-epic-arrow-desktop"
-        viewBox="0 0 700 220"
+        className="lf-compare-arrow lf-compare-arrow-desktop"
+        viewBox="0 0 800 120"
+        preserveAspectRatio="none"
         aria-hidden="true"
       >
         <path
-          className="lf-arrow-ghost"
-          d="M 30 30 C 80 10, 140 80, 200 65 C 260 50, 290 120, 360 100 C 420 84, 440 140, 380 175 C 330 205, 440 210, 520 190 C 580 175, 620 155, 660 170 C 680 178, 688 190, 686 200"
+          stroke="currentColor" strokeWidth="2.5" fill="none"
+          strokeLinecap="round" strokeDasharray="6 5" opacity="0.35"
+          d="M 120 30 C 200 10, 300 80, 400 55 C 500 30, 600 90, 680 70 C 730 55, 760 75, 775 95"
         />
         <path
-          className="lf-arrow-main"
-          d="M 30 30 C 80 10, 140 80, 200 65 C 260 50, 290 120, 360 100 C 420 84, 440 140, 380 175 C 330 205, 440 210, 520 190 C 580 175, 620 155, 660 170 C 680 178, 688 190, 686 200"
+          className="lf-compare-bridge"
+          d="M 120 30 C 200 10, 300 80, 400 55 C 500 30, 600 90, 680 70 C 730 55, 760 75, 775 95"
         />
         <path
-          className="lf-arrowhead-stroke"
-          d="M 672 188 L 686 200 L 674 210"
+          stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"
+          d="M 760 88 L 775 95 L 763 106"
         />
-        <text className="lf-arrow-note" x="355" y="92">
-          yeah, this bit
-        </text>
       </svg>
     );
   }
 
+  /* Mobile: vertical arrow between stacked cards */
+  return (
+    <svg
+      className="lf-compare-arrow lf-compare-arrow-mobile"
+      viewBox="0 0 120 80"
+      aria-hidden="true"
+    >
+      <path
+        className="lf-compare-bridge"
+        d="M 60 8 C 80 20, 30 35, 55 52 C 72 64, 65 72, 60 76"
+      />
+      <path
+        stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"
+        d="M 50 70 L 60 76 L 54 84"
+      />
+    </svg>
+  );
+}
+
+/* ─── CTA arrow — full-width overlay spanning GIF → GET ACCESS ── */
+function CtaArrow() {
+  const isDesktop = useMediaQuery("(min-width: 860px)");
+
+  if (isDesktop) {
+    /*
+     * Desktop layout: two columns, GIF left, pack card right.
+     * Arrow starts top-left (near GIF/Come Here), sweeps right and down,
+     * loops back, and terminates bottom-right (near GET ACCESS button).
+     * viewBox 0 0 1000 320 — matches the physical content width well.
+     * SVG is position:absolute, pointer-events:none, overflow:visible.
+     */
+    return (
+      <svg
+        className="lf-epic-arrow lf-epic-arrow-desktop"
+        viewBox="0 0 1000 320"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {/* ghost — thick, very faint, gives hand-drawn ink texture */}
+        <path
+          className="lf-arrow-ghost"
+          d="M 60 40
+             C 160 10, 280 90, 380 60
+             C 480 32, 520 130, 600 110
+             C 670 92, 680 170, 620 210
+             C 560 250, 680 255, 780 230
+             C 860 210, 920 185, 960 210
+             C 975 220, 982 238, 980 255"
+        />
+        {/* main visible stroke */}
+        <path
+          className="lf-arrow-main"
+          d="M 60 40
+             C 160 10, 280 90, 380 60
+             C 480 32, 520 130, 600 110
+             C 670 92, 680 170, 620 210
+             C 560 250, 680 255, 780 230
+             C 860 210, 920 185, 960 210
+             C 975 220, 982 238, 980 255"
+        />
+        {/* arrowhead */}
+        <path
+          className="lf-arrowhead-stroke"
+          d="M 964 244 L 980 255 L 968 266"
+        />
+        {/* annotation — sits mid-arc */}
+        <text className="lf-arrow-note" x="500" y="104">yeah, this bit</text>
+      </svg>
+    );
+  }
+
+  /*
+   * Mobile layout: stacked vertically. GIF/Come Here top, pack card bottom.
+   * Arrow uses FULL content width (viewBox 0 0 360 260).
+   * Starts top-right of content, snakes left-right across full width,
+   * terminates at bottom-center near GET ACCESS.
+   */
   return (
     <svg
       className="lf-epic-arrow lf-epic-arrow-mobile"
-      viewBox="0 0 120 200"
+      viewBox="0 0 360 260"
+      preserveAspectRatio="none"
       aria-hidden="true"
     >
       <path
         className="lf-arrow-ghost"
-        d="M 60 10 C 80 30, 30 50, 55 80 C 75 105, 35 130, 60 160 C 75 178, 70 188, 62 196"
+        d="M 300 20
+           C 340 20, 350 60, 310 80
+           C 260 105, 80 90, 50 120
+           C 20 148, 80 175, 160 175
+           C 230 175, 310 165, 330 200
+           C 345 225, 310 248, 260 250"
       />
       <path
         className="lf-arrow-main"
-        d="M 60 10 C 80 30, 30 50, 55 80 C 75 105, 35 130, 60 160 C 75 178, 70 188, 62 196"
+        d="M 300 20
+           C 340 20, 350 60, 310 80
+           C 260 105, 80 90, 50 120
+           C 20 148, 80 175, 160 175
+           C 230 175, 310 165, 330 200
+           C 345 225, 310 248, 260 250"
       />
-      <path className="lf-arrowhead-stroke" d="M 50 190 L 62 196 L 56 206" />
-      <text className="lf-arrow-note" x="72" y="108">this way genius</text>
+      <path
+        className="lf-arrowhead-stroke"
+        d="M 246 240 L 260 250 L 250 262"
+      />
+      <text className="lf-arrow-note" x="70" y="148">this way genius</text>
     </svg>
   );
 }

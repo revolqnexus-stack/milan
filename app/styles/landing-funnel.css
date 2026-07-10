@@ -503,6 +503,7 @@
   grid-template-columns: 1fr;
   gap: 24px;
   align-items: start;
+  position: relative; /* bridge arrow anchor */
 }
 @media (min-width: 760px) {
   .lf-compare-grid {
@@ -559,12 +560,13 @@
 .lf-compare-x { color: #ef4444; flex-shrink: 0; font-weight: 700; }
 .lf-compare-check { color: var(--lf-green); flex-shrink: 0; font-weight: 700; }
 
-/* Centre divider */
+/* Centre divider — just the word "or", no SVG prison */
 .lf-compare-or {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0;
+  min-width: 48px;
 }
 .lf-or-text {
   font-family: var(--font-caveat), "Caveat", cursive;
@@ -573,11 +575,45 @@
   color: var(--lf-caveat-color);
   margin: 0;
 }
-.lf-or-arrow {
-  width: 36px;
-  height: 60px;
+
+/* Bridge arrow — position:absolute overlay spanning the full compare-grid */
+.lf-compare-arrow {
+  position: absolute;
+  pointer-events: none;
   color: var(--lf-caveat-color);
-  opacity: 0.6;
+  overflow: visible;
+  z-index: 2;
+}
+/* Desktop: horizontal bridge sitting vertically centred */
+.lf-compare-arrow-desktop {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  transform: translateY(-50%);
+  display: none;
+}
+@media (min-width: 760px) {
+  .lf-compare-arrow-desktop { display: block; }
+}
+/* Mobile: vertical connector between stacked cards */
+.lf-compare-arrow-mobile {
+  bottom: calc(50% - 80px);
+  left: 50%;
+  width: 120px;
+  height: 80px;
+  transform: translateX(-50%);
+  display: block;
+}
+@media (min-width: 760px) {
+  .lf-compare-arrow-mobile { display: none; }
+}
+.lf-compare-bridge {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.5;
 }
 
 /* Annotation below grid */
@@ -594,28 +630,87 @@
 .lf-cta-section {
   background: var(--lf-bg);
   min-height: 80svh;
+  position: relative; /* arrow overlay anchor */
 }
 
+/* Arrow stage — position:absolute, spans full section padding box */
+.lf-s4-arrow-zone {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+.lf-epic-arrow-desktop,
+.lf-epic-arrow-mobile {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Show correct variant */
+.lf-epic-arrow-desktop { display: none; }
+.lf-epic-arrow-mobile  { display: block; }
+@media (min-width: 860px) {
+  .lf-epic-arrow-desktop { display: block; }
+  .lf-epic-arrow-mobile  { display: none; }
+}
+
+/* ghost stroke — thick, very faint, gives ink texture */
+.lf-arrow-ghost {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.06;
+}
+.lf-arrow-main {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+.lf-arrowhead-stroke {
+  fill: none;
+  stroke: var(--lf-text);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+.lf-arrow-note {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 22px;
+  font-weight: 600;
+  fill: var(--lf-caveat-color);
+  opacity: 0.75;
+}
+
+/* CTA inner — two-column grid on desktop, stacked on mobile */
 .lf-cta-inner {
+  position: relative;
+  z-index: 2; /* above arrow overlay */
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
   align-items: flex-start;
 }
 @media (min-width: 860px) {
   .lf-cta-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 0 56px;
-    align-items: start;
+    gap: 56px;
+    align-items: center;
   }
-  .lf-cta-gif-col    { grid-column: 1; grid-row: 1; }
-  .lf-s4-arrow-zone  { grid-column: 1 / -1; grid-row: 2; }
-  .lf-pack-card-wrap { grid-column: 2; grid-row: 1 / 3; align-self: center; }
 }
 
 .lf-cta-gif-col {
@@ -633,56 +728,6 @@
   color: var(--lf-text);
   margin: 0;
   text-transform: uppercase;
-}
-
-/* ── Epic arrow SVG ── */
-.lf-s4-arrow-zone { width: 100%; overflow: visible; }
-.lf-epic-arrow-desktop {
-  width: 100%; height: 140px;
-  overflow: visible;
-  display: none;
-}
-.lf-epic-arrow-mobile {
-  width: 100px; height: 180px;
-  overflow: visible;
-  display: block;
-  margin: 0 auto;
-}
-@media (min-width: 860px) {
-  .lf-epic-arrow-desktop { display: block; }
-  .lf-epic-arrow-mobile  { display: none; }
-}
-
-/* ghost stroke — paper texture */
-.lf-arrow-ghost {
-  fill: none;
-  stroke: var(--lf-text);
-  stroke-width: 5.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.06;
-}
-.lf-arrow-main {
-  fill: none;
-  stroke: var(--lf-text);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.lf-arrowhead-stroke {
-  fill: none;
-  stroke: var(--lf-text);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.lf-arrow-note {
-  font-family: var(--font-caveat), "Caveat", cursive;
-  font-size: 15px;
-  font-weight: 600;
-  fill: var(--lf-caveat-color);
-  transform: rotate(-4deg);
-  transform-origin: center;
 }
 
 /* ── Study pack card ── */
